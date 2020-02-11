@@ -13,21 +13,36 @@ public class ConnexionSQL {
 	private static String user = "nom_utilisateur_choisi";
 
 	private static String password = "mot_de_passe_solide";
-
-	private static Connection connect;
 	
 	
+	public static Connection getConn() {
+		try {
+			return DriverManager.getConnection(url, user, password);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	/*
 	
-	public static Connection getInstance(){
-		if(connect == null){
-			try {
-				connect = DriverManager.getConnection(url, user, password);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}		
-		return connect;	
-	}	
+	public void Connect() {
+		try {
+			connect = DriverManager.getConnection(url, user, password);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void closeConn() {
+		try {
+			connect.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	*/
 
 
 }

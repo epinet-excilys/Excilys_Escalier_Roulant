@@ -2,7 +2,7 @@ package src.java.main;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 
 import src.java.main.dao.*;
@@ -12,24 +12,35 @@ public class Application {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		
-		DAO<Computer> computerDao = new ComputeurDAO();
-		
-		//ArrayList<Computer> array = computerDao.findAll();
 
-		ArrayList<Company> array2 = null;
+		
+
+		List<Company> list = null;
+		List<Computer> list2 = null;
+		
 		try {
-			array2 = CompanyDAO.getInstance().findAll();
+			list = CompanyDAO.getInstance().findAll();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
+			list2 = ComputerDAO.getInstance().findAll();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		
-		for(Company c : array2) {
+		
+		for(Company c : list) {
 			System.out.println(c);
 		}
 		
+		for(Computer c : list2) {
+			System.out.println(c);
+		}
 		
 		
 		

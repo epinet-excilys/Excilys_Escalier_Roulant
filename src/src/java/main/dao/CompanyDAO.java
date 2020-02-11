@@ -5,16 +5,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 
 import src.java.main.model.*;
 
 public final class CompanyDAO extends DAO<Company> {
-	
+
 	private Connection connect;
 	private static volatile CompanyDAO instance = null;
 
-
-	private CompanyDAO() {//  seul le singleton s'appelle
+	private CompanyDAO() {// seul le singleton s'appelle
 		super();
 	}
 
@@ -58,17 +58,21 @@ public final class CompanyDAO extends DAO<Company> {
 		// TODO Auto-generated method stub
 
 		try {
-			connect = ConnexionSQL.getInstance();
-			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM company WHERE id = " + i);
+			connect = ConnexionSQL.getConn();
+			PreparedStatement stmt = connect.prepareStatement("select * from company where id=?");
+			stmt.setInt(1, i);
+
+			ResultSet result = stmt.executeQuery();
+
 			if (result.first())
 				company = new Company(i, result.getString("name"));
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			connect.close();
+			if (connect != null) {
+				connect.close();
+			}
 		}
 
 		return company;
@@ -80,10 +84,9 @@ public final class CompanyDAO extends DAO<Company> {
 		Company company;
 
 		try {
-			connect = ConnexionSQL.getInstance();
-			ResultSet result = this.connect
-					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
-					.executeQuery("SELECT * FROM computer");
+			connect = ConnexionSQL.getConn();
+			PreparedStatement stmt = connect.prepareStatement("select * from company");
+			ResultSet result = stmt.executeQuery();
 
 			while (result.next()) {
 				company = new Company(result.getInt("id"), result.getString("name"));
@@ -94,7 +97,9 @@ public final class CompanyDAO extends DAO<Company> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			connect.close();
+			if (connect != null) {
+				connect.close();
+			}
 		}
 
 		return list;
