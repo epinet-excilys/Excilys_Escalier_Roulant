@@ -8,19 +8,24 @@ public class Computer {
 	private String name;
 	private Date introDate;
 	private Date discoDate;
-	private Company company;
+	private int companyId;
 	
 	
 	
-	public Computer(int id, String name, Date introDate, Date discoDate, Company company) {
+	public Computer(int id, String name, Date introDate, Date discoDate, int companyId) {
 		this.id = id;
 		this.name = name;
 		this.introDate = introDate;
 		this.discoDate = discoDate;
-		this.company = company;
+		this.companyId = companyId;
 	}
-	
-	
+		
+	public Computer() {
+	}
+
+
+
+
 	public int getId() {
 		return id;
 	}
@@ -45,23 +50,26 @@ public class Computer {
 	public void setDiscoDate(Date discoDate) {
 		this.discoDate = discoDate;
 	}
-	public Company getCompany() {
-		return company;
+	public int getCompanyId() {
+		return companyId;
 	}
-	public void setCompany(Company company) {
-		this.company = company;
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
 	}
+
 
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((company == null) ? 0 : company.hashCode());
+		result = prime * result + companyId;
+		result = prime * result + ((discoDate == null) ? 0 : discoDate.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((introDate == null) ? 0 : introDate.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -72,10 +80,19 @@ public class Computer {
 		if (getClass() != obj.getClass())
 			return false;
 		Computer other = (Computer) obj;
-		if (company == null) {
-			if (other.company != null)
+		if (companyId != other.companyId)
+			return false;
+		if (discoDate == null) {
+			if (other.discoDate != null)
 				return false;
-		} else if (!company.equals(other.company))
+		} else if (!discoDate.equals(other.discoDate))
+			return false;
+		if (id != other.id)
+			return false;
+		if (introDate == null) {
+			if (other.introDate != null)
+				return false;
+		} else if (!introDate.equals(other.introDate))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -85,10 +102,9 @@ public class Computer {
 		return true;
 	}
 
-
 	@Override
 	public String toString() {
-		return "Computer [id=" + id + ", name=" + name + ", company=" + company + "]";
+		return "Computer [id=" + id + ", name=" + name + ", company=" + companyId + "]";
 	}
 	
 	
