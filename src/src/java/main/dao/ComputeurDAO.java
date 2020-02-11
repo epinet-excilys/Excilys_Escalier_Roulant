@@ -10,11 +10,28 @@ import java.sql.Date;
 
 import src.java.main.model.*;
 
-public class ComputeurDAO extends DAO<Computer>{
+public final class ComputeurDAO extends DAO<Computer> {
 
-	public ComputeurDAO(Connection connect) {
-		super(connect);
+	private Connection connect;
+	private static volatile ComputeurDAO instance = null;
+
+	private ComputeurDAO() {
+		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public final static ComputeurDAO getInstance() {
+		
+		if (ComputeurDAO.instance == null) {
+
+			synchronized (ComputeurDAO.class) {
+				if (ComputeurDAO.instance == null) {
+					ComputeurDAO.instance = new ComputeurDAO();
+				}
+			}
+		}
+
+		return ComputeurDAO.instance;
 	}
 
 	@Override
@@ -36,67 +53,63 @@ public class ComputeurDAO extends DAO<Computer>{
 	}
 
 	@Override
-	public Computer find(int i) {
-		Computer computer = new Computer(); 
+	public Computer find(int i) throws SQLException {
+		Computer computer = new Computer();
 		// TODO Auto-generated method stub
-		
+
 		try {
-		      ResultSet result = this.connect.createStatement(
-		        ResultSet.TYPE_SCROLL_INSENSITIVE,
-		        ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM computer WHERE id = " + i);
-		      if(result.first())
-		        computer = new Computer(i,
-		        		result.getString("nom"),
-		        		result.getDate("introduced"),
-		        		result.getDate("discontinued"),
-		        		Integer.valueOf(result.getString("company_id")));   
-		      
-		    } catch (SQLException e) {
-		      e.printStackTrace();
-		    }
-		 
+			connect = ConnexionSQL.getInstance();
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery("SELECT * FROM computer WHERE id = " + i);
+			if (result.first())
+				computer = new Computer(i, result.getString("name"), result.getDate("introduced"),
+						result.getDate("discontinued"), result.getInt("company_id"));
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			connect.close();
+		}
+
 		return computer;
 	}
-	
-	public ArrayList<Computer> findAll(){
-		
+
+	public ArrayList<Computer> findAll() throws SQLException {
+
 		ArrayList<Computer> list = new ArrayList<Computer>();
 		Computer computer;
-		
-		try {
-		      ResultSet result = this.connect.createStatement(
-		        ResultSet.TYPE_SCROLL_INSENSITIVE,
-		        ResultSet.CONCUR_READ_ONLY).executeQuery("SELECT * FROM computer");
 
-		      
-			while(result.next()) {
-		        computer = new Computer(result.getInt("id"),
-		        		result.getString("name"),
-		        		result.getDate("introduced"),
-		        		result.getDate("discontinued"),
-		        		result.getInt("company_id"));   
-			
-			list.add(computer);
+		try {
+			connect = ConnexionSQL.getInstance();
+			ResultSet result = this.connect
+					.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
+					.executeQuery("SELECT * FROM computer");
+
+			while (result.next()) {
+				computer = new Computer(result.getInt("id"), result.getString("name"), result.getDate("introduced"),
+						result.getDate("discontinued"), result.getInt("company_id"));
+
+				list.add(computer);
 			}
-		      
-		    } catch (SQLException e) {
-		      e.printStackTrace();
-		    }
-		
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			connect.close();
+		}
+
 		return list;
 	}
 
-	//Pas utile pour le moment
+	// Pas utile pour le moment
 	private Date FromStringtoDate(String s) throws ParseException {
-		 SimpleDateFormat formatter2=new SimpleDateFormat("yyyy-MM-dd");
-		 
-		    Date date2=(Date) formatter2.parse(s);
-		    
-		    return date2;
-		
+		SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
+
+		Date date2 = (Date) formatter2.parse(s);
+
+		return date2;
+
 	}
-	
-	
-	    
 
 }

@@ -1,15 +1,12 @@
 package src.java.main.dao;
 
 import java.sql.Connection;
-import java.util.ArrayList;
+import java.sql.SQLException;
 
 
 public abstract class DAO<T> {
 	
-	protected Connection connect = null;
-	
-	public DAO(Connection connect) {
-		this.connect = connect;
+	public DAO() {
 	}
 	
 	public abstract boolean create(T obj);
@@ -18,11 +15,6 @@ public abstract class DAO<T> {
 	
 	public abstract boolean update(T obj);
 	
-	public abstract T find(int i);
-
-	public ArrayList findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public abstract T find(int i) throws SQLException;
 
 }

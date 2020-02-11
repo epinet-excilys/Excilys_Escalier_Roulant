@@ -1,34 +1,40 @@
 package src.java.main;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import src.java.main.dao.*;
-import src.java.main.model.Computer;
+import src.java.main.model.*;
 
 public class Application {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		Connection connec = ConnexionSQL.getInstance();
-		DAO<Computer> computerDao = new ComputeurDAO(connec);
+		DAO<Computer> computerDao = new ComputeurDAO();
 		
-		ArrayList<Computer> array = computerDao.findAll();
-		Iterator it = array.iterator();
-		
-		System.out.print("bonjour1");
-		
-		for(Computer c : array) {
-			System.out.println(c + "bleu");
+		//ArrayList<Computer> array = computerDao.findAll();
+
+		ArrayList<Company> array2 = null;
+		try {
+			array2 = CompanyDAO.getInstance().findAll();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-
 		
-		System.out.print("bonjour2");
+		for(Company c : array2) {
+			System.out.println(c);
+		}
+		
+		
+		
 		
 		
 	}
 
 }
+ 
