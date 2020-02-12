@@ -104,5 +104,31 @@ public final class CompanyDAO extends DAO<Company> {
 
 		return list;
 	}
+	
+	public int getNbRow () throws SQLException {
+		int a = 0;
+		
+		try {
+			connect = ConnexionSQL.getConn();
+			PreparedStatement stmt = connect.prepareStatement("SELECT COUNT(*) as \"Rows\" FROM company;");
+			ResultSet result = stmt.executeQuery();
+
+			if (result.first()) {
+				a = result.getInt("Rows");
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Base non-atteinte");
+		} finally {
+			if (connect != null) {
+				connect.close();
+			}
+		}
+		
+		return a;
+		
+	}
 
 }

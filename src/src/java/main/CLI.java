@@ -12,11 +12,10 @@ public class CLI {
 
 	private static int valeur = -2;
 	private Scanner sc;
-	private ComputerDAOImpl computerDAOimpl;
+
 
 	public CLI() {
 		sc = new Scanner(System.in);
-		computerDAOimpl = new ComputerDAOImpl();
 	}
 
 	public void demonstration() {
@@ -40,6 +39,7 @@ public class CLI {
 				break;
 			case 1:
 				afficher("un comput");
+				affiComput();
 				break;
 			case 2:
 				afficher("ajout comput");
@@ -78,10 +78,26 @@ public class CLI {
 	}
 
 	public void affiComput() {
+		
+		
+		int a = scannerId();
+		
+		if(a != -1) {
+		Computer comp = ComputerDAOImpl.getInstance().find(a);
+		afficher(comp);
+		}else {
+			afficher("Pas de Correspondance en Base");
+		}
+		
 
 	}
 
 	public void affiAllComput() {
+		List<Computer> list = ComputerDAOImpl.getInstance().getAllComput(); 
+		
+		for(Computer c : list) {
+			afficher(c);
+		}
 
 	}
 
@@ -125,4 +141,29 @@ public class CLI {
 
 	}
 
+	public int scannerId() {
+		int valMaxId = ComputerDAOImpl.getInstance().getNbRows();
+		int repEnInt = -1;
+		String rep = "";
+		 if (valMaxId != -1) {
+			 afficher("Entrez l'ID de la machine que vous voulez verifier : (Nb max :" + valMaxId + ")");
+			 do {
+
+					try {
+						rep = sc.nextLine();
+
+						repEnInt = Integer.parseInt(rep);
+
+					} catch (Exception e) {
+						afficher("Veuillez entrer une valeurs compréhensive pour le programme");
+						repEnInt = -1;
+					}
+
+				} while (repEnInt == -1 || (repEnInt <= 0 && repEnInt > valMaxId));
+		 }
+		
+		
+		return repEnInt;
+		
+	}
 }

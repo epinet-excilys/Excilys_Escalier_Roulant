@@ -3,6 +3,7 @@ package src.java.main.dao;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -107,7 +108,7 @@ public final class ComputerDAO extends DAO<Computer> {
 			stmt.setInt(5, obj.getId());
 			//
 			stmt.setString(1, obj.getName());
-			stmt.setObject(2, obj.getIntroDate());
+			stmt.setTimestamp(2, Timestamp.valueOf(obj.getIntroDate()));
 			stmt.setObject(3, obj.getDiscoDate());
 			stmt.setInt(4, obj.getCompanyId());
 
@@ -196,6 +197,32 @@ public final class ComputerDAO extends DAO<Computer> {
 		}
 
 		return list;
+	}
+	
+	public int getNbRow () throws SQLException {
+		int a = 0;
+		
+		try {
+			connect = ConnexionSQL.getConn();
+			PreparedStatement stmt = connect.prepareStatement("SELECT COUNT(*) as \"Rows\" FROM computer;");
+			ResultSet result = stmt.executeQuery();
+
+			if (result.first()) {
+				a = result.getInt("Rows");
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Base non-atteinte");
+		} finally {
+			if (connect != null) {
+				connect.close();
+			}
+		}
+		
+		return a;
+		
 	}
 
 

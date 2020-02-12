@@ -7,19 +7,39 @@ import java.util.List;
 import src.java.main.dao.ComputerDAO;
 import src.java.main.model.Computer;
 
-public class ComputerDAOImpl {
+public final class ComputerDAOImpl {
+	
+	private static volatile ComputerDAOImpl instance = null;
 	
 	
+	private ComputerDAOImpl() {
+        super();
+    }
+    
+
+    public final static ComputerDAOImpl getInstance() {
+
+        if (ComputerDAOImpl.instance == null) {
+
+           synchronized(ComputerDAOImpl.class) {
+             if (ComputerDAOImpl.instance == null) {
+            	 ComputerDAOImpl.instance = new ComputerDAOImpl();
+             }
+           }
+        }
+        return ComputerDAOImpl.instance;
+    }
+
 	// A MODIFIER
 	public void update(Computer obj) {
 		Computer comp = null;
 		try {
 			comp = ComputerDAO.getInstance().find(obj.getId());
-		} catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		if(comp != null) {
+
+		if (comp != null) {
 			try {
 				ComputerDAO.getInstance().update(obj);
 			} catch (SQLException e) {
@@ -28,16 +48,16 @@ public class ComputerDAOImpl {
 			}
 		}
 	}
-	
-	public void add (Computer obj) {
+
+	public void add(Computer obj) {
 		Computer comp = null;
 		try {
 			comp = ComputerDAO.getInstance().find(obj.getId());
-		} catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		if(comp == null) {
+
+		if (comp == null) {
 			try {
 				ComputerDAO.getInstance().create(obj);
 			} catch (SQLException e) {
@@ -46,16 +66,16 @@ public class ComputerDAOImpl {
 			}
 		}
 	}
-	
-	public void delete (Computer obj) {
+
+	public void delete(Computer obj) {
 		Computer comp = null;
 		try {
 			comp = ComputerDAO.getInstance().find(obj.getId());
-		} catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		if(comp != null) {
+
+		if (comp != null) {
 			try {
 				ComputerDAO.getInstance().delete(comp);
 			} catch (SQLException e) {
@@ -63,18 +83,28 @@ public class ComputerDAOImpl {
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 
-	
 	//
 	public Computer find(int i) {
 		Computer comp = null;
+		int a = -1;
+
 		try {
-			comp = ComputerDAO.getInstance().find(i);
-		} catch (SQLException e) {
+			a = ComputerDAO.getInstance().getNbRow();
+		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
+		}
+
+		if ((i <= a) && (a != -1)) {
+			try {
+				comp = ComputerDAO.getInstance().find(i);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		return comp;
@@ -93,6 +123,18 @@ public class ComputerDAOImpl {
 
 		return list;
 
+	}
+	
+	public int getNbRows() {
+		int a = -1;
+		try {
+			a = ComputerDAO.getInstance().getNbRow();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return a;
 	}
 
 }
