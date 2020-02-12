@@ -104,7 +104,7 @@ public class Computer {
 
 	@Override
 	public String toString() {
-		return "Computer [id=" + id + ", name=" + name + ", company=" + companyId + "]";
+		return "Computer [id=" + id + ", name=" + name + ", company=" + companyId + ", IntroDate=" + introDate + ", DiscoDate=" + discoDate  +"]";
 	}
 	
 	

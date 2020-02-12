@@ -105,7 +105,7 @@ public final class ComputerDAO extends DAO<Computer> {
 					"update computer set name=?, introduced=? , discontinued=?, company_id=? where id=?");
 
 			stmt.setInt(5, obj.getId());
-
+			//
 			stmt.setString(1, obj.getName());
 			stmt.setDate(2, obj.getIntroDate());
 			stmt.setDate(3, obj.getDiscoDate());
@@ -113,13 +113,14 @@ public final class ComputerDAO extends DAO<Computer> {
 
 			int i = stmt.executeUpdate();
 
-			System.out.println(i + " records deleted");
+			System.out.println(i + " records updated");
 
 			flag = true;
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("Base non-atteinte");
 		} finally {
 			if (connect != null) {
 				connect.close();
@@ -137,7 +138,7 @@ public final class ComputerDAO extends DAO<Computer> {
 		try {
 			connect = ConnexionSQL.getConn();
 			PreparedStatement stmt = connect.prepareStatement("SELECT * FROM computer WHERE id = ? ");
-			stmt.setInt(1, 1);
+			stmt.setInt(1, i);
 			ResultSet result = stmt.executeQuery();
 
 			if (result.first()) {
@@ -148,6 +149,7 @@ public final class ComputerDAO extends DAO<Computer> {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Base non-atteinte");
 		} finally {
 			if (connect != null) {
 				connect.close();
@@ -156,13 +158,6 @@ public final class ComputerDAO extends DAO<Computer> {
 
 		return computer;
 	}
-
-	// ("SELECT * FROM computer WHERE id = " + i);
-	/*
-	 * new Computer(i, result.getString("name"), result.getDate("introduced"),
-	 * result.getDate("discontinued"), result.getInt("company_id"));
-	 * 
-	 */
 
 	public ArrayList<Computer> findAll() throws SQLException {
 
@@ -183,6 +178,7 @@ public final class ComputerDAO extends DAO<Computer> {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Base non-atteinte");
 		} finally {
 			if (connect != null) {
 				connect.close();

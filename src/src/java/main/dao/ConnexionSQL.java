@@ -24,25 +24,6 @@ public class ConnexionSQL {
 		}
 		return null;
 	}
-	/*
 	
-	public void Connect() {
-		try {
-			connect = DriverManager.getConnection(url, user, password);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void closeConn() {
-		try {
-			connect.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	*/
-
 
 }
