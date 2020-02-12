@@ -13,13 +13,17 @@ public class Application {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
+		/*
 		
 		CLI cli = new CLI();
 		
 		cli.demonstration();
 
-		/* GetAll();
-		 * 
+		*/
+		
+		
+		//GetAll();
+		  
 		List<Company> list = null;
 		List<Computer> list2 = null;
 		
@@ -45,7 +49,7 @@ public class Application {
 		for(Computer c : list2) {
 			System.out.println(c);
 		}
-		*/
+		
 		
 		
 		

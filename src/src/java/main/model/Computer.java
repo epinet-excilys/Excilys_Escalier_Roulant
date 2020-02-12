@@ -1,18 +1,18 @@
 package src.java.main.model;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 public class Computer {
 	
 	private int id;
 	private String name;
-	private Date introDate;
-	private Date discoDate;
+	private LocalDateTime introDate;
+	private LocalDateTime discoDate;
 	private int companyId;
 	
 	
 	
-	public Computer(int id, String name, Date introDate, Date discoDate, int companyId) {
+	public Computer(int id, String name, LocalDateTime introDate, LocalDateTime discoDate, int companyId) {
 		this.id = id;
 		this.name = name;
 		this.introDate = introDate;
@@ -38,16 +38,16 @@ public class Computer {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Date getIntroDate() {
+	public LocalDateTime getIntroDate() {
 		return introDate;
 	}
-	public void setIntroDate(Date introDate) {
+	public void setIntroDate(LocalDateTime introDate) {
 		this.introDate = introDate;
 	}
-	public Date getDiscoDate() {
+	public LocalDateTime getDiscoDate() {
 		return discoDate;
 	}
-	public void setDiscoDate(Date discoDate) {
+	public void setDiscoDate(LocalDateTime discoDate) {
 		this.discoDate = discoDate;
 	}
 	public int getCompanyId() {

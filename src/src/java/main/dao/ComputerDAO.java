@@ -45,8 +45,8 @@ public final class ComputerDAO extends DAO<Computer> {
 			PreparedStatement stmt = connect.prepareStatement("insert into computer values(?,?,?,?,?)");
 			stmt.setInt(1, obj.getId());
 			stmt.setString(2, obj.getName());
-			stmt.setDate(3, obj.getIntroDate());
-			stmt.setDate(4, obj.getDiscoDate());
+			stmt.setObject(3, obj.getIntroDate());
+			stmt.setObject(4, obj.getDiscoDate());
 			stmt.setInt(5, obj.getCompanyId());
 
 			int i = stmt.executeUpdate();
@@ -107,8 +107,8 @@ public final class ComputerDAO extends DAO<Computer> {
 			stmt.setInt(5, obj.getId());
 			//
 			stmt.setString(1, obj.getName());
-			stmt.setDate(2, obj.getIntroDate());
-			stmt.setDate(3, obj.getDiscoDate());
+			stmt.setObject(2, obj.getIntroDate());
+			stmt.setObject(3, obj.getDiscoDate());
 			stmt.setInt(4, obj.getCompanyId());
 
 			int i = stmt.executeUpdate();
@@ -142,8 +142,13 @@ public final class ComputerDAO extends DAO<Computer> {
 			ResultSet result = stmt.executeQuery();
 
 			if (result.first()) {
-				computer = new Computer(result.getInt("id"), result.getString("name"), result.getDate("introduced"),
-						result.getDate("discontinued"), result.getInt("company_id"));
+				computer = new Computer(result.getInt("id"), result.getString("name"),
+						result.getTimestamp("introduced") != null ? result.getTimestamp("introduced").toLocalDateTime()
+								: null,
+						result.getTimestamp("discontinued") != null
+								? result.getTimestamp("discontinued").toLocalDateTime()
+								: null,
+						result.getInt("company_id"));
 
 			}
 
@@ -170,8 +175,13 @@ public final class ComputerDAO extends DAO<Computer> {
 			ResultSet result = stmt.executeQuery();
 
 			while (result.next()) {
-				computer = new Computer(result.getInt("id"), result.getString("name"), result.getDate("introduced"),
-						result.getDate("discontinued"), result.getInt("company_id"));
+				computer = new Computer(result.getInt("id"), result.getString("name"),
+						result.getTimestamp("introduced") != null ? result.getTimestamp("introduced").toLocalDateTime()
+								: null,
+						result.getTimestamp("discontinued") != null
+								? result.getTimestamp("discontinued").toLocalDateTime()
+								: null,
+						result.getInt("company_id"));
 
 				list.add(computer);
 			}
@@ -187,5 +197,6 @@ public final class ComputerDAO extends DAO<Computer> {
 
 		return list;
 	}
+
 
 }
