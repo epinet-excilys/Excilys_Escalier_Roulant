@@ -13,7 +13,6 @@ public class CLI {
 	private static int valeur = -2;
 	private Scanner sc;
 
-
 	public CLI() {
 		sc = new Scanner(System.in);
 	}
@@ -43,9 +42,11 @@ public class CLI {
 				break;
 			case 2:
 				afficher("ajout comput");
+				//ajout
 				break;
 			case 3:
 				afficher("suppr comput");
+				deletComput();
 				break;
 			case 4:
 				afficher("modif comput");
@@ -75,33 +76,43 @@ public class CLI {
 
 	public void deletComput() {
 
+		int a = scannerId("supprimer");
+
+		if (a != -1) {
+			Computer comp = ComputerDAOImpl.getInstance().find(a);
+			afficher(comp);
+
+			ComputerDAOImpl.getInstance().delete(comp);
+		} else {
+			afficher("Pas de Correspondance en Base");
+		}
+
 	}
 
 	public void affiComput() {
-		
-		
-		int a = scannerId();
-		
-		if(a != -1) {
-		Computer comp = ComputerDAOImpl.getInstance().find(a);
-		afficher(comp);
-		}else {
+
+		int a = scannerId("afficher");
+
+		if (a != -1) {
+			Computer comp = ComputerDAOImpl.getInstance().find(a);
+			afficher(comp);
+		} else {
 			afficher("Pas de Correspondance en Base");
 		}
-		
 
 	}
 
 	public void affiAllComput() {
-		List<Computer> list = ComputerDAOImpl.getInstance().getAllComput(); 
-		
-		for(Computer c : list) {
+		List<Computer> list = ComputerDAOImpl.getInstance().getAllComput();
+
+		for (Computer c : list) {
 			afficher(c);
 		}
 
 	}
 
-	// Methode Compan
+	// Methode
+	// Compan-----------------------------------------------------------------------------------
 
 	public void affiCompan() {
 
@@ -141,29 +152,58 @@ public class CLI {
 
 	}
 
-	public int scannerId() {
+	public int scannerId(String personnalisation) {
 		int valMaxId = ComputerDAOImpl.getInstance().getNbRows();
 		int repEnInt = -1;
 		String rep = "";
-		 if (valMaxId != -1) {
-			 afficher("Entrez l'ID de la machine que vous voulez verifier : (Nb max :" + valMaxId + ")");
-			 do {
+		if (valMaxId != -1) {
+			afficher("Entrez l'ID de la machine que vous voulez " + personnalisation + " : (Nb max :" + valMaxId + ")");
+			do {
 
-					try {
-						rep = sc.nextLine();
+				try {
+					rep = sc.nextLine();
 
-						repEnInt = Integer.parseInt(rep);
+					repEnInt = Integer.parseInt(rep);
 
-					} catch (Exception e) {
-						afficher("Veuillez entrer une valeurs compréhensive pour le programme");
-						repEnInt = -1;
-					}
+				} catch (Exception e) {
+					afficher("Veuillez entrer une valeurs compréhensive pour le programme");
+					repEnInt = -1;
+				}
 
-				} while (repEnInt == -1 || (repEnInt <= 0 && repEnInt > valMaxId));
-		 }
-		
-		
+			} while (repEnInt == -1 || (repEnInt <= 0 && repEnInt > valMaxId));
+		}
+
 		return repEnInt;
-		
+
 	}
+
+	public boolean scannerSur() {
+
+		String oui = "OUI";
+		String non = "non";
+		String rep = "vide";
+
+		do {
+			afficher("Etes vous sur ? [" + oui + ":" + non + "]");
+
+			try {
+				rep = sc.nextLine();
+
+			} catch (Exception e) {
+				afficher("Veuillez entrer une valeurs compréhensive pour le programme");
+			}
+
+		} while (rep != "OUI" || rep != "NON");
+
+		if (rep == oui) {
+			return true;
+		} else if (rep == non) {
+			return false;
+		} else {
+			afficher("Erreur de saisi");
+			return false;
+		}
+
+	}
+
 }
