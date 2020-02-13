@@ -8,7 +8,7 @@ import java.util.Scanner;
 import src.java.main.model.Computer;
 import src.java.main.service.CompanyDAOImpl;
 import src.java.main.service.ComputerDAOImpl;
-import src.java.main.mapper.CliMapper;;
+import src.java.main.mapper.ComputerMapper;;
 
 public class CLI {
 
@@ -98,7 +98,7 @@ public class CLI {
 			String passage_2 = a + "";
 			tabRep[4]=(passage_2);
 			
-			comp = CliMapper.getInstance().fromStringToComput((tabRep));
+			comp = ComputerMapper.getInstance().fromStringToComput((tabRep));
 			
 			afficher("Vous voulez ajoutez cette machine" + comp);
 

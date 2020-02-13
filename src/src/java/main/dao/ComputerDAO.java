@@ -6,16 +6,21 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 
 import src.java.main.model.*;
 
-public final class ComputerDAO extends DAO<Computer> {
+public final class ComputerDAO {
 
 	private Connection connect;
 	private static volatile ComputerDAO instance = null;
+	private final String createStatement = "INSERT INTO computer(name, introduced, discontinued, company_id) "
+			+ "VALUES(?, ?, ?, ?);";
+	private final String updateStatement = "UPDATE computer set name=?, introduced=? , discontinued=?, company_id=? where id=?";
+	private final String deleteStatement = "DELETE from computer where id=?";
 
 	private ComputerDAO() {
 		super();
@@ -36,24 +41,24 @@ public final class ComputerDAO extends DAO<Computer> {
 		return ComputerDAO.instance;
 	}
 
-	@Override
-	public boolean create(Computer obj) throws SQLException {
-
-		boolean flag = false;
+	public void create(Computer computer) throws SQLException {
 
 		try {
 			connect = ConnexionSQL.getConn();
-			PreparedStatement stmt = connect.prepareStatement("insert into computer values(?,?,?,?,?)");
-			stmt.setInt(1, obj.getId());
-			stmt.setString(2, obj.getName());
-			stmt.setObject(3, obj.getIntroDate());
-			stmt.setObject(4, obj.getDiscoDate());
-			stmt.setInt(5, obj.getCompanyId());
+			PreparedStatement stmt = connect.prepareStatement(createStatement);
 
-			int i = stmt.executeUpdate();
-			System.out.println(i + " records inserted");
+			stmt.setString(1, computer.getName());
+			stmt.setTimestamp(2,
+					computer.getIntroDate() != null
+							? Timestamp.valueOf(computer.getIntroDate().atTime(LocalTime.MIDNIGHT))
+							: null);
+			stmt.setTimestamp(3,
+					computer.getDiscoDate() != null
+							? Timestamp.valueOf(computer.getDiscoDate().atTime(LocalTime.MIDNIGHT))
+							: null);
+			stmt.setInt(4, computer.getCompany().getId());
 
-			flag = true;
+			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -63,26 +68,18 @@ public final class ComputerDAO extends DAO<Computer> {
 				connect.close();
 			}
 		}
-
-		return flag;
-
 	}
 
-	@Override
-	public boolean delete(Computer obj) throws SQLException {
-		// TODO Auto-generated method stub
-		boolean flag = false;
+	public void delete(Computer computer) throws SQLException {
 
 		try {
 			connect = ConnexionSQL.getConn();
 			PreparedStatement stmt;
-			stmt = connect.prepareStatement("delete from computer where id=?");
-			stmt.setInt(1, obj.getId());
-			int i = stmt.executeUpdate();
 
-			System.out.println(i + " records deleted");
+			stmt = connect.prepareStatement(deleteStatement);
 
-			flag = true;
+			stmt.setInt(1, computer.getId());
+			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -92,31 +89,25 @@ public final class ComputerDAO extends DAO<Computer> {
 				connect.close();
 			}
 		}
-
-		return flag;
 	}
 
-	@Override
-	public boolean update(Computer obj) throws SQLException {
-		boolean flag = false;
+	public void update(Computer computer) throws SQLException {
+
 		connect = ConnexionSQL.getConn();
 		PreparedStatement stmt;
 		try {
-			stmt = connect.prepareStatement(
-					"update computer set name=?, introduced=? , discontinued=?, company_id=? where id=?");
+			stmt = connect.prepareStatement(updateStatement);
 
-			stmt.setInt(5, obj.getId());
+			stmt.setInt(5, computer.getId());
 			//
-			stmt.setString(1, obj.getName());
-			stmt.setTimestamp(2, Timestamp.valueOf(obj.getIntroDate()));
-			stmt.setObject(3, obj.getDiscoDate());
-			stmt.setInt(4, obj.getCompanyId());
+			stmt.setString(1, computer.getName());
+			stmt.setTimestamp(2, Timestamp.valueOf(computer.getIntroDate().atTime(LocalTime.MIDNIGHT)));
+			stmt.setTimestamp(3, Timestamp.valueOf(computer.getDiscoDate().atTime(LocalTime.MIDNIGHT)));
+			stmt.setInt(4, computer.getCompany().getId());
 
 			int i = stmt.executeUpdate();
 
 			System.out.println(i + " records updated");
-
-			flag = true;
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -128,11 +119,8 @@ public final class ComputerDAO extends DAO<Computer> {
 			}
 		}
 
-		return flag;
-
 	}
 
-	@Override
 	public Computer find(int i) throws SQLException {
 		Computer computer = new Computer();
 		// TODO Auto-generated method stub
@@ -144,12 +132,13 @@ public final class ComputerDAO extends DAO<Computer> {
 
 			if (result.first()) {
 				computer = new Computer(result.getInt("id"), result.getString("name"),
-						result.getTimestamp("introduced") != null ? result.getTimestamp("introduced").toLocalDateTime()
+						result.getTimestamp("introduced") != null
+								? result.getTimestamp("introduced").toLocalDateTime().toLocalDate()
 								: null,
 						result.getTimestamp("discontinued") != null
-								? result.getTimestamp("discontinued").toLocalDateTime()
+								? result.getTimestamp("discontinued").toLocalDateTime().toLocalDate()
 								: null,
-						result.getInt("company_id"));
+						new Company(result.getInt("company_id")));
 
 			}
 
@@ -177,13 +166,13 @@ public final class ComputerDAO extends DAO<Computer> {
 
 			while (result.next()) {
 				computer = new Computer(result.getInt("id"), result.getString("name"),
-						result.getTimestamp("introduced") != null ? result.getTimestamp("introduced").toLocalDateTime()
+						result.getTimestamp("introduced") != null
+								? result.getTimestamp("introduced").toLocalDateTime().toLocalDate()
 								: null,
 						result.getTimestamp("discontinued") != null
-								? result.getTimestamp("discontinued").toLocalDateTime()
+								? result.getTimestamp("discontinued").toLocalDateTime().toLocalDate()
 								: null,
-						result.getInt("company_id"));
-
+						new Company(result.getInt("company_id")));
 				list.add(computer);
 			}
 
@@ -198,10 +187,10 @@ public final class ComputerDAO extends DAO<Computer> {
 
 		return list;
 	}
-	
-	public int getNbRow () throws SQLException {
+
+	public int getNbRow() throws SQLException {
 		int a = 0;
-		
+
 		try {
 			connect = ConnexionSQL.getConn();
 			PreparedStatement stmt = connect.prepareStatement("SELECT COUNT(*) as \"Rows\" FROM computer;");
@@ -220,10 +209,9 @@ public final class ComputerDAO extends DAO<Computer> {
 				connect.close();
 			}
 		}
-		
-		return a;
-		
-	}
 
+		return a;
+
+	}
 
 }

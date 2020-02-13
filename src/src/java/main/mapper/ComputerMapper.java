@@ -7,28 +7,28 @@ import java.util.List;
 
 import src.java.main.model.Computer;
 
-public final class CliMapper {
+public final class ComputerMapper {
 	private final int nb_de_champs = 5; 
 	
 	
-private static volatile CliMapper instance = null;
+private static volatile ComputerMapper instance = null;
 	
 	
-	private CliMapper() {
+	private ComputerMapper() {
         super();
     }
 	
-	public final static CliMapper getInstance() {
+	public final static ComputerMapper getInstance() {
 		
-		if (CliMapper.instance == null) {
+		if (ComputerMapper.instance == null) {
 
-	           synchronized(CliMapper.class) {
-	             if (CliMapper.instance == null) {
-	            	 CliMapper.instance = new CliMapper();
+	           synchronized(ComputerMapper.class) {
+	             if (ComputerMapper.instance == null) {
+	            	 ComputerMapper.instance = new ComputerMapper();
 	             }
 	           }
 	        }
-	        return CliMapper.instance;
+	        return ComputerMapper.instance;
 		
 	}
 
@@ -67,6 +67,10 @@ private static volatile CliMapper instance = null;
 	
 		
 	}
+	
+	
+	
+	//TODO : Ne marche pas 
 	
 	public LocalDateTime fromStringToLocalDateTime (String s) {
 

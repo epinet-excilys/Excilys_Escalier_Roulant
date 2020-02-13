@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 
 import src.java.main.model.*;
 
-public final class CompanyDAO extends DAO<Company> {
+public final class CompanyDAO {
 
 	private Connection connect;
 	private static volatile CompanyDAO instance = null;
