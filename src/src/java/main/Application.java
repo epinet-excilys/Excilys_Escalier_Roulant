@@ -53,8 +53,8 @@ public class Application {
 		
 		*/
 		
-		/* find et 
-		
+		 
+		/*
 		try {
 			Computer comp = ComputerDAO.getInstance().find(5);
 			System.out.println(comp);
@@ -73,8 +73,9 @@ public class Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		*/
+		
+	
 		
 		/*
 		try {
