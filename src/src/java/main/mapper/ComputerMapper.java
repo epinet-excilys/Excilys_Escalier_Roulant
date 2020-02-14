@@ -1,14 +1,17 @@
 package src.java.main.mapper;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import src.java.main.model.Company;
 import src.java.main.model.Computer;
 
 public final class ComputerMapper {
-	private final int nb_de_champs = 5; 
+
 	
 	
 private static volatile ComputerMapper instance = null;
@@ -31,9 +34,38 @@ private static volatile ComputerMapper instance = null;
 	        return ComputerMapper.instance;
 		
 	}
+	
+	
+	
 
 	
+	public Computer getComputer(ResultSet resultSet) {
+		Computer computer = new Computer();
+		Company company = new Company();
+		try {
+			computer.setId(resultSet.getInt("id"));
+			computer.setName(resultSet.getString("name"));
+			//
+			computer.setIntroDate(resultSet.getTimestamp("introduced") != null
+					? resultSet.getTimestamp("introduced").toLocalDateTime().toLocalDate()
+							: null);
+			computer.setDiscoDate(resultSet.getTimestamp("discontinued") != null
+					? resultSet.getTimestamp("discontinued").toLocalDateTime().toLocalDate()
+							: null);
+			
+			//
+			company.setId(resultSet.getInt("company_id"));
+			company.setName(resultSet.getString("company.name"));
+			computer.setCompany(company);
+		} catch (SQLException e) {
+			//TODO log
+		}
+		
+		return computer;
+	}
+
 	
+	/*
 	public Computer fromStringToComput(String[] result) {
 		
 		Computer comput = new Computer();
@@ -67,6 +99,7 @@ private static volatile ComputerMapper instance = null;
 	
 		
 	}
+	*/
 	
 	
 	

@@ -4,17 +4,25 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 
 import src.java.main.model.*;
 
+
+// A FAIRE
 public final class CompanyDAO {
 
 	private Connection connect;
 	private static volatile CompanyDAO instance = null;
+	private final String getStatement = "select id, name from company where id=?";
+	private final String getAllStatement = "select company.id, company.name from company";
+	private final String getNbRowsStatement = "SELECT COUNT(*) as \"Rows\" FROM company;";
+	
+	
+	
+	
 
-	private CompanyDAO() {// seul le singleton s'appelle
+	private CompanyDAO() {
 		super();
 	}
 
@@ -32,34 +40,22 @@ public final class CompanyDAO {
 
 	}
 
-	@Override
-	public boolean create(Company obj) {
-		// TODO Auto-generated method stub
-		return false;
+	public void create(Company obj) {
 	}
 
-	@Override
-	public boolean delete(Company obj) {
-		// TODO Auto-generated method stub
-		return false;
+	public void delete(Company obj) {
 	}
 
-	@Override
-	public boolean update(Company obj) {
-		// TODO Auto-generated method stub
-		return false;
+	public void update(Company obj) {
 	}
 
-	@Override
 	public Company find(int i) throws SQLException {
-		// TODO Auto-generated method stub
 
 		Company company = new Company();
-		// TODO Auto-generated method stub
 
 		try {
 			connect = ConnexionSQL.getConn();
-			PreparedStatement stmt = connect.prepareStatement("select * from company where id=?");
+			PreparedStatement stmt = connect.prepareStatement(getStatement);
 			stmt.setInt(1, i);
 
 			ResultSet result = stmt.executeQuery();
@@ -68,7 +64,7 @@ public final class CompanyDAO {
 				company = new Company(i, result.getString("name"));
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// TODO REMPLIR AVEC LOG
 		} finally {
 			if (connect != null) {
 				connect.close();
@@ -85,7 +81,7 @@ public final class CompanyDAO {
 
 		try {
 			connect = ConnexionSQL.getConn();
-			PreparedStatement stmt = connect.prepareStatement("select * from company");
+			PreparedStatement stmt = connect.prepareStatement(getAllStatement);
 			ResultSet result = stmt.executeQuery();
 
 			while (result.next()) {
@@ -95,7 +91,7 @@ public final class CompanyDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// TODO REMPLIR AVEC LOG
 		} finally {
 			if (connect != null) {
 				connect.close();
@@ -110,7 +106,7 @@ public final class CompanyDAO {
 		
 		try {
 			connect = ConnexionSQL.getConn();
-			PreparedStatement stmt = connect.prepareStatement("SELECT COUNT(*) as \"Rows\" FROM company;");
+			PreparedStatement stmt = connect.prepareStatement(getNbRowsStatement);
 			ResultSet result = stmt.executeQuery();
 
 			if (result.first()) {
@@ -119,8 +115,7 @@ public final class CompanyDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Base non-atteinte");
+			//TODO remplir avec les Logs
 		} finally {
 			if (connect != null) {
 				connect.close();

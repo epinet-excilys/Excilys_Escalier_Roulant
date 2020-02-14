@@ -8,13 +8,15 @@ import java.util.Scanner;
 import src.java.main.model.Computer;
 import src.java.main.service.CompanyDAOImpl;
 import src.java.main.service.ComputerDAOImpl;
-import src.java.main.mapper.ComputerMapper;;
+import src.java.main.mapper.ComputerMapper;
+import src.java.main.EnumMenu;;
 
 public class CLI {
 
-	private static int VALEUR = -2;
+
 	private Scanner sc;
 	private String[] tabRep = {"","","","",""} ;
+	private boolean flagContinue; 
 
 	public CLI() {
 		sc = new Scanner(System.in);
@@ -22,11 +24,11 @@ public class CLI {
 	}
 
 	public void demonstration() {
-		int a = VALEUR;
+		flagContinue = true;
 		int commande = 0;
 		afficher("Version t+3 de la BDD - acces console");
 
-		while (a == VALEUR) {
+		while (flagContinue) {
 			afficher("Saisir : 0 pour afficher la liste Computer");
 			afficher("         1 pour afficher un Computer");
 			afficher("         2 pour ajouter un Computer");
@@ -34,33 +36,40 @@ public class CLI {
 			afficher("         4 pour modifier un Computer");
 			afficher("         5 pour afficher la liste Company");
 			afficher("         6 pour quitter");
+			
+			
 			commande = scannerQuestion(0, 6);
-			switch (commande) {
-			case 0:
+			
+			
+			
+			switch (EnumMenu.valueOf(commande)) {
+			
+			
+			case DISPLAYALLCOMPUTER:
 				afficher("liste comput");
 				affiAllComput();
 				break;
-			case 1:
+			case DISPLAYCOMPUTER:
 				afficher("un comput");
 				affiComput();
 				break;
-			case 2:
+			case CREATE:
 				afficher("ajout comput");
 				addComput();
 				break;
-			case 3:
+			case DELETE:
 				afficher("suppr comput");
 				deletComput();
 				break;
-			case 4:
+			case UPDATE:
 				afficher("modif comput");
 				break;
-			case 5:
+			case DISPLAYCOMPANY:
 				afficher("affich company");
 				break;
-			case 6:
+			case EXIT:
 				afficher("Quitter le prog");
-				a = 0;
+				flagContinue = false;
 				break;
 
 			}
@@ -69,6 +78,7 @@ public class CLI {
 
 	}
 
+	//TODO A REFAIRE
 	// Methode Comput
 	public void addComput() {
 		
@@ -94,6 +104,7 @@ public class CLI {
 			
 			System.out.println(a);
 			
+			/*
 			
 			String passage_2 = a + "";
 			tabRep[4]=(passage_2);
@@ -101,7 +112,7 @@ public class CLI {
 			comp = ComputerMapper.getInstance().fromStringToComput((tabRep));
 			
 			afficher("Vous voulez ajoutez cette machine" + comp);
-
+			*/
 		
 		//ComputerDAOImpl.getInstance().add(comp);
 
