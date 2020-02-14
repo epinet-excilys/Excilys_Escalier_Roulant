@@ -39,7 +39,7 @@ private static volatile ComputerMapper instance = null;
 	
 
 	
-	public Computer getComputer(ResultSet resultSet) {
+	public Computer getComputerFromResultSet(ResultSet resultSet) {
 		Computer computer = new Computer();
 		Company company = new Company();
 		try {

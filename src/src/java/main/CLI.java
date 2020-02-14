@@ -44,7 +44,6 @@ public class CLI {
 			
 			switch (EnumMenu.valueOf(commande)) {
 			
-			
 			case DISPLAYALLCOMPUTER:
 				afficher("liste comput");
 				affiAllComput();
@@ -207,6 +206,7 @@ public class CLI {
 
 	}
 
+	//TODO Modifier
 	public int scannerIdComput(String personnalisation) {
 		int valMaxId = ComputerDAOImpl.getInstance().getNbRows();
 		int repEnInt = -1;

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.PreparedStatement;
 
+import src.java.main.mapper.CompanyMapper;
 import src.java.main.model.*;
 
 
@@ -18,6 +19,8 @@ public final class CompanyDAO {
 	private final String getAllStatement = "select company.id, company.name from company";
 	private final String getNbRowsStatement = "SELECT COUNT(*) as \"Rows\" FROM company;";
 	
+	private PreparedStatement stmt = null; 
+	private ResultSet result ;
 	
 	
 	
@@ -55,20 +58,22 @@ public final class CompanyDAO {
 
 		try {
 			connect = ConnexionSQL.getConn();
-			PreparedStatement stmt = connect.prepareStatement(getStatement);
+			stmt = connect.prepareStatement(getStatement);
 			stmt.setInt(1, i);
 
-			ResultSet result = stmt.executeQuery();
+			result = stmt.executeQuery();
 
-			if (result.first())
+			if (result.first()) {
 				company = new Company(i, result.getString("name"));
-
+			}
 		} catch (SQLException e) {
 			// TODO REMPLIR AVEC LOG
 		} finally {
 			if (connect != null) {
 				connect.close();
 			}
+			stmt.close();
+			result.close();
 		}
 
 		return company;
@@ -81,11 +86,11 @@ public final class CompanyDAO {
 
 		try {
 			connect = ConnexionSQL.getConn();
-			PreparedStatement stmt = connect.prepareStatement(getAllStatement);
-			ResultSet result = stmt.executeQuery();
+			stmt = connect.prepareStatement(getAllStatement);
+			result = stmt.executeQuery();
 
 			while (result.next()) {
-				company = new Company(result.getInt("id"), result.getString("name"));
+				company = CompanyMapper.getInstance().getCompanyFromResultSet(result);
 
 				list.add(company);
 			}
@@ -96,6 +101,8 @@ public final class CompanyDAO {
 			if (connect != null) {
 				connect.close();
 			}
+			stmt.close();
+			result.close();
 		}
 
 		return list;
@@ -106,8 +113,8 @@ public final class CompanyDAO {
 		
 		try {
 			connect = ConnexionSQL.getConn();
-			PreparedStatement stmt = connect.prepareStatement(getNbRowsStatement);
-			ResultSet result = stmt.executeQuery();
+			stmt = connect.prepareStatement(getNbRowsStatement);
+			result = stmt.executeQuery();
 
 			if (result.first()) {
 				a = result.getInt("Rows");
@@ -120,6 +127,8 @@ public final class CompanyDAO {
 			if (connect != null) {
 				connect.close();
 			}
+			stmt.close();
+			result.close();
 		}
 		
 		return a;

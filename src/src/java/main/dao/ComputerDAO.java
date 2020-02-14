@@ -137,7 +137,7 @@ public final class ComputerDAO {
 
 			if (result.first()) {
 				
-				computer = ComputerMapper.getInstance().getComputer(result);
+				computer = ComputerMapper.getInstance().getComputerFromResultSet(result);
 
 			}
 
@@ -165,7 +165,7 @@ public final class ComputerDAO {
 			result = stmt.executeQuery();
 
 			while (result.next()) {
-				computer = ComputerMapper.getInstance().getComputer(result);
+				computer = ComputerMapper.getInstance().getComputerFromResultSet(result);
 				list.add(computer);
 			}
 
