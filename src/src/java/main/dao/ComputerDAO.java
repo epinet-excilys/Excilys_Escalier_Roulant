@@ -27,6 +27,9 @@ public final class ComputerDAO {
 			+ " FROM computer  LEFT JOIN company ON company_id = company.id WHERE computer.id = ?;";
 	private final String getAllStatement = "SELECT * FROM computer LEFT JOIN company ON company_id = company.id ;";
 	private final String getNbRowsStatement = "SELECT COUNT(*) as \"Rows\" FROM computer;";
+	
+	private PreparedStatement stmt = null; 
+	private ResultSet result ;
 
 	private ComputerDAO() {
 		super();
@@ -50,7 +53,7 @@ public final class ComputerDAO {
 
 		try {
 			connect = ConnexionSQL.getConn();
-			PreparedStatement stmt = connect.prepareStatement(createStatement);
+			stmt = connect.prepareStatement(createStatement);
 
 			stmt.setString(1, computer.getName());
 			stmt.setTimestamp(2,
@@ -71,6 +74,7 @@ public final class ComputerDAO {
 			if (connect != null) {
 				connect.close();
 			}
+			stmt.close();
 		}
 	}
 
@@ -78,7 +82,6 @@ public final class ComputerDAO {
 
 		try {
 			connect = ConnexionSQL.getConn();
-			PreparedStatement stmt;
 
 			stmt = connect.prepareStatement(deleteStatement);
 
@@ -91,14 +94,15 @@ public final class ComputerDAO {
 			if (connect != null) {
 				connect.close();
 			}
+			stmt.close();
 		}
 	}
 
 	public void update(Computer computer) throws SQLException {
 
-		connect = ConnexionSQL.getConn();
-		PreparedStatement stmt;
+	
 		try {
+			connect = ConnexionSQL.getConn();
 			stmt = connect.prepareStatement(updateStatement);
 
 			stmt.setInt(5, computer.getId());
@@ -117,17 +121,19 @@ public final class ComputerDAO {
 			if (connect != null) {
 				connect.close();
 			}
+			stmt.close();
 		}
 
 	}
 
 	public Computer find(int i) throws SQLException {
+		
 		Computer computer = new Computer();
 		try {
 			connect = ConnexionSQL.getConn();
-			PreparedStatement stmt = connect.prepareStatement(getStatement);
+			stmt = connect.prepareStatement(getStatement);
 			stmt.setInt(1, i);
-			ResultSet result = stmt.executeQuery();
+			result = stmt.executeQuery();
 
 			if (result.first()) {
 				
@@ -141,6 +147,8 @@ public final class ComputerDAO {
 			if (connect != null) {
 				connect.close();
 			}
+			stmt.close();
+			result.close();
 		}
 
 		return computer;
@@ -153,8 +161,8 @@ public final class ComputerDAO {
 
 		try {
 			connect = ConnexionSQL.getConn();
-			PreparedStatement stmt = connect.prepareStatement(getAllStatement);
-			ResultSet result = stmt.executeQuery();
+			stmt = connect.prepareStatement(getAllStatement);
+			result = stmt.executeQuery();
 
 			while (result.next()) {
 				computer = ComputerMapper.getInstance().getComputer(result);
@@ -167,6 +175,9 @@ public final class ComputerDAO {
 			if (connect != null) {
 				connect.close();
 			}
+			stmt.close();
+			result.close();
+			
 		}
 
 		return list;
@@ -177,8 +188,8 @@ public final class ComputerDAO {
 
 		try {
 			connect = ConnexionSQL.getConn();
-			PreparedStatement stmt = connect.prepareStatement(getNbRowsStatement);
-			ResultSet result = stmt.executeQuery();
+			stmt = connect.prepareStatement(getNbRowsStatement);
+			result = stmt.executeQuery();
 
 			if (result.first()) {
 				a = result.getInt("Rows");
@@ -191,6 +202,8 @@ public final class ComputerDAO {
 			if (connect != null) {
 				connect.close();
 			}
+			stmt.close();
+			result.close();
 		}
 
 		return a;

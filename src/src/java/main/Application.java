@@ -61,6 +61,7 @@ public class Application {
 			
 			comp.setId(1000);
 			comp.setName("UnPcLambda");
+
 			 
 			ComputerDAO.getInstance().create(comp);
 			
@@ -72,8 +73,9 @@ public class Application {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}	
 		*/
+
 		
 	
 		
