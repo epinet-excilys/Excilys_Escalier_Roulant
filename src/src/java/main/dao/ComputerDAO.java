@@ -16,7 +16,6 @@ import src.java.main.model.*;
 
 public final class ComputerDAO {
 
-	private Connection connect;
 	private static volatile ComputerDAO instance = null;
 	private final String createStatement = "INSERT INTO computer(name, introduced, discontinued, company_id) "
 			+ "VALUES(?, ?, ?, ?);";
@@ -27,9 +26,8 @@ public final class ComputerDAO {
 			+ " FROM computer  LEFT JOIN company ON company_id = company.id WHERE computer.id = ?;";
 	private final String getAllStatement = "SELECT * FROM computer LEFT JOIN company ON company_id = company.id ;";
 	private final String getNbRowsStatement = "SELECT COUNT(*) as \"Rows\" FROM computer;";
-	
-	private PreparedStatement stmt = null; 
-	private ResultSet result ;
+
+	private ResultSet result;
 
 	private ComputerDAO() {
 		super();
@@ -51,10 +49,8 @@ public final class ComputerDAO {
 
 	public void create(Computer computer) throws SQLException {
 
-		try {
-			connect = ConnexionSQL.getConn();
-			stmt = connect.prepareStatement(createStatement);
-
+		try (Connection connect = ConnexionSQL.getConn();
+				PreparedStatement stmt = connect.prepareStatement(createStatement);) {
 			stmt.setString(1, computer.getName());
 			stmt.setTimestamp(2,
 					computer.getIntroDate() != null
@@ -70,43 +66,29 @@ public final class ComputerDAO {
 
 		} catch (SQLException e) {
 			// TODO REMPLIR AVEC LOG
-		} finally {
-			if (connect != null) {
-				connect.close();
-			}
-			stmt.close();
-		}
+		} 
 	}
 
 	public void delete(Computer computer) throws SQLException {
 
-		try {
-			connect = ConnexionSQL.getConn();
-
-			stmt = connect.prepareStatement(deleteStatement);
+		try (Connection connect = ConnexionSQL.getConn();
+				PreparedStatement stmt = connect.prepareStatement(deleteStatement);) {
 
 			stmt.setInt(1, computer.getId());
 			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			// TODO REMPLIR AVEC LOG
-		} finally {
-			if (connect != null) {
-				connect.close();
-			}
-			stmt.close();
-		}
+		} 
 	}
 
 	public void update(Computer computer) throws SQLException {
 
-	
-		try {
-			connect = ConnexionSQL.getConn();
-			stmt = connect.prepareStatement(updateStatement);
+		try (Connection connect = ConnexionSQL.getConn();
+				PreparedStatement stmt = connect.prepareStatement(updateStatement);) {
 
 			stmt.setInt(5, computer.getId());
-			
+
 			stmt.setString(1, computer.getName());
 			stmt.setTimestamp(2, Timestamp.valueOf(computer.getIntroDate().atTime(LocalTime.MIDNIGHT)));
 			stmt.setTimestamp(3, Timestamp.valueOf(computer.getDiscoDate().atTime(LocalTime.MIDNIGHT)));
@@ -114,29 +96,22 @@ public final class ComputerDAO {
 
 			stmt.executeUpdate();
 
-
 		} catch (SQLException e) {
 			// TODO REMPLIR AVEC LOG
-		} finally {
-			if (connect != null) {
-				connect.close();
-			}
-			stmt.close();
 		}
 
 	}
 
 	public Computer find(int i) throws SQLException {
-		
+
 		Computer computer = new Computer();
-		try {
-			connect = ConnexionSQL.getConn();
-			stmt = connect.prepareStatement(getStatement);
+		try (Connection connect = ConnexionSQL.getConn();
+				PreparedStatement stmt = connect.prepareStatement(getStatement);) {
 			stmt.setInt(1, i);
 			result = stmt.executeQuery();
 
 			if (result.first()) {
-				
+
 				computer = ComputerMapper.getInstance().getComputerFromResultSet(result);
 
 			}
@@ -144,10 +119,6 @@ public final class ComputerDAO {
 		} catch (SQLException e) {
 			// TODO REMPLIR AVEC LOG
 		} finally {
-			if (connect != null) {
-				connect.close();
-			}
-			stmt.close();
 			result.close();
 		}
 
@@ -159,11 +130,10 @@ public final class ComputerDAO {
 		ArrayList<Computer> list = new ArrayList<Computer>();
 		Computer computer;
 
-		try {
-			connect = ConnexionSQL.getConn();
-			stmt = connect.prepareStatement(getAllStatement);
-			result = stmt.executeQuery();
+		try (Connection connect = ConnexionSQL.getConn();
+				PreparedStatement stmt = connect.prepareStatement(getAllStatement);) {
 
+			result = stmt.executeQuery();
 			while (result.next()) {
 				computer = ComputerMapper.getInstance().getComputerFromResultSet(result);
 				list.add(computer);
@@ -172,12 +142,8 @@ public final class ComputerDAO {
 		} catch (SQLException e) {
 			// TODO REMPLIR AVEC LOG
 		} finally {
-			if (connect != null) {
-				connect.close();
-			}
-			stmt.close();
 			result.close();
-			
+
 		}
 
 		return list;
@@ -186,9 +152,8 @@ public final class ComputerDAO {
 	public int getNbRow() throws SQLException {
 		int a = 0;
 
-		try {
-			connect = ConnexionSQL.getConn();
-			stmt = connect.prepareStatement(getNbRowsStatement);
+		try (Connection connect = ConnexionSQL.getConn();
+				PreparedStatement stmt = connect.prepareStatement(getNbRowsStatement);) {
 			result = stmt.executeQuery();
 
 			if (result.first()) {
@@ -199,10 +164,6 @@ public final class ComputerDAO {
 		} catch (SQLException e) {
 			// TODO REMPLIR AVEC LOG
 		} finally {
-			if (connect != null) {
-				connect.close();
-			}
-			stmt.close();
 			result.close();
 		}
 

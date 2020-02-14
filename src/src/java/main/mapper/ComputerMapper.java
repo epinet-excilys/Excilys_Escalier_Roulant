@@ -39,10 +39,9 @@ private static volatile ComputerMapper instance = null;
 	
 
 	
-	public Computer getComputerFromResultSet(ResultSet resultSet) {
+	public Computer getComputerFromResultSet(ResultSet resultSet) throws SQLException {
 		Computer computer = new Computer();
 		Company company = new Company();
-		try {
 			computer.setId(resultSet.getInt("id"));
 			computer.setName(resultSet.getString("name"));
 			//
@@ -57,9 +56,6 @@ private static volatile ComputerMapper instance = null;
 			company.setId(resultSet.getInt("company_id"));
 			company.setName(resultSet.getString("company.name"));
 			computer.setCompany(company);
-		} catch (SQLException e) {
-			//TODO log
-		}
 		
 		return computer;
 	}

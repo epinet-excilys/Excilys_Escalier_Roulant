@@ -10,8 +10,6 @@ public  enum  EnumMenu {
 	  EXIT;
 	
 
-	  EnumMenu() {
-	}
 	  
 	public static EnumMenu valueOf(int action) {
 		

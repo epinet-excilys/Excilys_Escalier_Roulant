@@ -9,21 +9,15 @@ import java.sql.PreparedStatement;
 import src.java.main.mapper.CompanyMapper;
 import src.java.main.model.*;
 
-
 // A FAIRE
 public final class CompanyDAO {
 
-	private Connection connect;
 	private static volatile CompanyDAO instance = null;
 	private final String getStatement = "select id, name from company where id=?";
 	private final String getAllStatement = "select company.id, company.name from company";
 	private final String getNbRowsStatement = "SELECT COUNT(*) as \"Rows\" FROM company;";
-	
-	private PreparedStatement stmt = null; 
-	private ResultSet result ;
-	
-	
-	
+
+	private ResultSet result;
 
 	private CompanyDAO() {
 		super();
@@ -56,9 +50,9 @@ public final class CompanyDAO {
 
 		Company company = new Company();
 
-		try {
-			connect = ConnexionSQL.getConn();
-			stmt = connect.prepareStatement(getStatement);
+		try (Connection connect = ConnexionSQL.getConn();
+				PreparedStatement stmt = connect.prepareStatement(getStatement);) {
+
 			stmt.setInt(1, i);
 
 			result = stmt.executeQuery();
@@ -69,10 +63,6 @@ public final class CompanyDAO {
 		} catch (SQLException e) {
 			// TODO REMPLIR AVEC LOG
 		} finally {
-			if (connect != null) {
-				connect.close();
-			}
-			stmt.close();
 			result.close();
 		}
 
@@ -84,9 +74,9 @@ public final class CompanyDAO {
 		ArrayList<Company> list = new ArrayList<Company>();
 		Company company;
 
-		try {
-			connect = ConnexionSQL.getConn();
-			stmt = connect.prepareStatement(getAllStatement);
+		try (Connection connect = ConnexionSQL.getConn();
+				PreparedStatement stmt = connect.prepareStatement(getAllStatement);){
+			
 			result = stmt.executeQuery();
 
 			while (result.next()) {
@@ -98,22 +88,18 @@ public final class CompanyDAO {
 		} catch (SQLException e) {
 			// TODO REMPLIR AVEC LOG
 		} finally {
-			if (connect != null) {
-				connect.close();
-			}
-			stmt.close();
 			result.close();
 		}
 
 		return list;
 	}
-	
-	public int getNbRow () throws SQLException {
+
+	public int getNbRow() throws SQLException {
 		int a = 0;
-		
-		try {
-			connect = ConnexionSQL.getConn();
-			stmt = connect.prepareStatement(getNbRowsStatement);
+
+		try (		Connection	connect = ConnexionSQL.getConn();
+			PreparedStatement stmt = connect.prepareStatement(getNbRowsStatement);) {
+
 			result = stmt.executeQuery();
 
 			if (result.first()) {
@@ -122,7 +108,7 @@ public final class CompanyDAO {
 			}
 
 		} catch (SQLException e) {
-			//TODO remplir avec les Logs
+			// TODO remplir avec les Logs
 		} finally {
 			if (connect != null) {
 				connect.close();
@@ -130,9 +116,9 @@ public final class CompanyDAO {
 			stmt.close();
 			result.close();
 		}
-		
+
 		return a;
-		
+
 	}
 
 }
