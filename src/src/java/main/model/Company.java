@@ -16,6 +16,11 @@ public class Company {
 
 
 
+	public Company(int id) {
+		this.id = id;
+		
+	}
+
 	public int getId() {
 		return id;
 	}
