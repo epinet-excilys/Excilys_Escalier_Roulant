@@ -25,6 +25,7 @@ public final class ComputerDAO {
 	private final String getStatement = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id"
 			+ " FROM computer  LEFT JOIN company ON company_id = company.id WHERE computer.id = ?;";
 	private final String getAllStatement = "SELECT * FROM computer LEFT JOIN company ON company_id = company.id ;";
+	private final String getAllPaginateStatement = "SELECT * FROM computer LEFT JOIN company ON company_id = company.id LIMIT ?, ?;";
 	private final String getNbRowsStatement = "SELECT COUNT(*) as \"Rows\" FROM computer;";
 
 	private ResultSet result;
@@ -66,7 +67,7 @@ public final class ComputerDAO {
 
 		} catch (SQLException e) {
 			// TODO REMPLIR AVEC LOG
-		} 
+		}
 	}
 
 	public void delete(Computer computer) throws SQLException {
@@ -79,7 +80,7 @@ public final class ComputerDAO {
 
 		} catch (SQLException e) {
 			// TODO REMPLIR AVEC LOG
-		} 
+		}
 	}
 
 	public void update(Computer computer) throws SQLException {
@@ -133,6 +134,31 @@ public final class ComputerDAO {
 		try (Connection connect = ConnexionSQL.getConn();
 				PreparedStatement stmt = connect.prepareStatement(getAllStatement);) {
 
+			result = stmt.executeQuery();
+			while (result.next()) {
+				computer = ComputerMapper.getInstance().getComputerFromResultSet(result);
+				list.add(computer);
+			}
+
+		} catch (SQLException e) {
+			// TODO REMPLIR AVEC LOG
+		} finally {
+			result.close();
+
+		}
+
+		return list;
+	}
+
+	public ArrayList<Computer> findAllPaginate(int ligneDebutOffSet, int taillePage) throws SQLException {
+
+		ArrayList<Computer> list = new ArrayList<Computer>();
+		Computer computer;
+
+		try (Connection connect = ConnexionSQL.getConn();
+				PreparedStatement stmt = connect.prepareStatement(getAllPaginateStatement);) {
+			stmt.setInt(1, ligneDebutOffSet);
+			stmt.setInt(2, taillePage);
 			result = stmt.executeQuery();
 			while (result.next()) {
 				computer = ComputerMapper.getInstance().getComputerFromResultSet(result);

@@ -75,8 +75,8 @@ public final class CompanyDAO {
 		Company company;
 
 		try (Connection connect = ConnexionSQL.getConn();
-				PreparedStatement stmt = connect.prepareStatement(getAllStatement);){
-			
+				PreparedStatement stmt = connect.prepareStatement(getAllStatement);) {
+
 			result = stmt.executeQuery();
 
 			while (result.next()) {
@@ -97,8 +97,8 @@ public final class CompanyDAO {
 	public int getNbRow() throws SQLException {
 		int a = 0;
 
-		try (		Connection	connect = ConnexionSQL.getConn();
-			PreparedStatement stmt = connect.prepareStatement(getNbRowsStatement);) {
+		try (Connection connect = ConnexionSQL.getConn();
+				PreparedStatement stmt = connect.prepareStatement(getNbRowsStatement);) {
 
 			result = stmt.executeQuery();
 
@@ -110,10 +110,6 @@ public final class CompanyDAO {
 		} catch (SQLException e) {
 			// TODO remplir avec les Logs
 		} finally {
-			if (connect != null) {
-				connect.close();
-			}
-			stmt.close();
 			result.close();
 		}
 

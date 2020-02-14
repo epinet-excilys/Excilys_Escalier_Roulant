@@ -8,27 +8,25 @@ import src.java.main.dao.ComputerDAO;
 import src.java.main.model.Computer;
 
 public final class ComputerDAOImpl {
-	
+
 	private static volatile ComputerDAOImpl instance = null;
-	
-	
+
 	private ComputerDAOImpl() {
-        super();
-    }
-    
+		super();
+	}
 
-    public final static ComputerDAOImpl getInstance() {
+	public final static ComputerDAOImpl getInstance() {
 
-        if (ComputerDAOImpl.instance == null) {
+		if (ComputerDAOImpl.instance == null) {
 
-           synchronized(ComputerDAOImpl.class) {
-             if (ComputerDAOImpl.instance == null) {
-            	 ComputerDAOImpl.instance = new ComputerDAOImpl();
-             }
-           }
-        }
-        return ComputerDAOImpl.instance;
-    }
+			synchronized (ComputerDAOImpl.class) {
+				if (ComputerDAOImpl.instance == null) {
+					ComputerDAOImpl.instance = new ComputerDAOImpl();
+				}
+			}
+		}
+		return ComputerDAOImpl.instance;
+	}
 
 	// A MODIFIER
 	public void update(Computer obj) {
@@ -124,7 +122,22 @@ public final class ComputerDAOImpl {
 		return list;
 
 	}
-	
+
+	public List<Computer> getAllPaginateComput(int ligneDebutOffSet, int taillePage) {
+		List<Computer> list = null;
+		try {
+
+			list = ComputerDAO.getInstance().findAllPaginate(ligneDebutOffSet, taillePage);
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+
 	public int getNbRows() {
 		int a = -1;
 		try {
@@ -133,7 +146,7 @@ public final class ComputerDAOImpl {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return a;
 	}
 

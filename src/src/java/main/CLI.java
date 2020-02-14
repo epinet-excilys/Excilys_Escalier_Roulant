@@ -17,6 +17,7 @@ public class CLI {
 	private Scanner sc;
 	private String[] tabRep = {"","","","",""} ;
 	private boolean flagContinue; 
+	private final int TAILLE_PAGE = 20;
 
 	public CLI() {
 		sc = new Scanner(System.in);
@@ -46,7 +47,8 @@ public class CLI {
 			
 			case DISPLAYALLCOMPUTER:
 				afficher("liste comput");
-				affiAllComput();
+				//affiAllComput();
+				affiAllPaginateComput();
 				break;
 			case DISPLAYCOMPUTER:
 				afficher("un comput");
@@ -156,6 +158,26 @@ public class CLI {
 			afficher(c);
 		}
 
+	}
+	
+	public void affiAllPaginateComput() {
+		int nbTotalRows  =  ComputerDAOImpl.getInstance().getNbRows();
+		int currentRow = 0; 
+
+		
+		do {
+			List<Computer>list = ComputerDAOImpl.getInstance().getAllPaginateComput(currentRow, TAILLE_PAGE);
+			for (Computer c : list) {
+				afficher(c);
+			}
+			afficher("----------------");
+			currentRow+=20;
+			
+		}while (currentRow<nbTotalRows);
+		
+		
+		
+		
 	}
 
 	// Methode
