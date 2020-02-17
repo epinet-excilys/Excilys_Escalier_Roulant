@@ -2,6 +2,7 @@ package src.java.main;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -9,7 +10,8 @@ import src.java.main.model.Computer;
 import src.java.main.service.CompanyDAOImpl;
 import src.java.main.service.ComputerDAOImpl;
 import src.java.main.mapper.ComputerMapper;
-import src.java.main.EnumMenu;;
+import src.java.main.EnumMenu;
+import src.java.main.dao.ComputerDAO;;
 
 public class CLI {
 
@@ -85,32 +87,31 @@ public class CLI {
 
 		int i = (ComputerDAOImpl.getInstance().getNbRows() + 1);
 		String passage_1 = "" + i + "";
+		
 		tabRep[0] = (passage_1);
 
 		afficher("Saisir le nom");
 		tabRep[1] = "Nom";// (sc.nextLine());
 
-		afficher("Saisir la Date d'introduction sur le marché (AAAA-MM-dd");
+		afficher("Saisir la Date d'introduction sur le marché (AAAA-MM-dd)");
 		tabRep[2] = (sc.nextLine());
 
-		afficher("Saisir la Date de retrait du le marché (AAAA-MM-dd");
+		afficher("Saisir la Date de retrait du le marché (AAAA-MM-dd)");
 		tabRep[3] = (sc.nextLine());
 
 		afficher("Saisir l'id de la companie ");
-		int a = scannerIdCompan("ajoutez");
-
-		System.out.println(a);
-
-		/*
-		 * TODO ENLEVER LE CODE String passage_2 = a + ""; tabRep[4]=(passage_2);
-		 * 
-		 * comp = ComputerMapper.getInstance().fromStringToComput((tabRep));
-		 * 
-		 * afficher("Vous voulez ajoutez cette machine" + comp);
-		 */
-
-		// ComputerDAOImpl.getInstance().add(comp);
-
+		tabRep[4] = String.valueOf(scannerIdCompan("ajoutez"));
+		
+		Computer computer = ComputerMapper.getInstance().fromStringToComput(tabRep);
+		
+		afficher(computer);
+		
+		
+		try {
+			ComputerDAO.getInstance().create(computer);
+		} catch (SQLException e) {
+			// TODO Log
+		}
 	}
 
 	public void modifComput() {
@@ -122,6 +123,7 @@ public class CLI {
 		int commandeId = scannerIdComput("supprimer");
 
 		if (commandeId != -1) {
+			
 			Computer comp = ComputerDAOImpl.getInstance().find(commandeId).get();
 			afficher(comp);
 
@@ -135,7 +137,7 @@ public class CLI {
 	public void affiComput() {
 
 		int commandeId = scannerIdComput("afficher");
-
+		afficher(commandeId);
 		if (commandeId != -1) {
 			Computer comp = ComputerDAOImpl.getInstance().find(commandeId).get();
 			afficher(comp);
@@ -181,7 +183,7 @@ public class CLI {
 
 	}
 
-	// Methode Console
+	//--------------- Methode Console-----------------------------------------------------------
 
 	public void afficher(Object s) {
 		System.out.println(s);
@@ -224,7 +226,7 @@ public class CLI {
 		int repEnInt = -1;
 		String rep = "";
 		if (valMaxId != -1) {
-			afficher("Entrez l'ID de la machine que vous voulez " + personnalisation + " : (Nb max :" + valMaxId + ")");
+			afficher("Entrez l'ID de la machine que vous voulez " + personnalisation );
 			do {
 
 				try {
@@ -237,13 +239,20 @@ public class CLI {
 					repEnInt = -1;
 				}
 
-			} while (repEnInt == -1 || (repEnInt <= 0 && repEnInt > valMaxId));
+			} while (repEnInt == -1);
 		}
 
 		return repEnInt;
 
 	}
 
+	public String scannerString(String personnalisation) {
+		String rep = "non_valable";
+
+		return rep;
+	}
+	
+	
 	// TODO REFAIRE CETTE FONCTION
 	/*
 	 * public boolean scannerSur() {
@@ -265,19 +274,13 @@ public class CLI {
 	 * }
 	 */
 
-	public String scannerString(String personnalisation) {
-		String rep = "non_valable";
 
-		return rep;
-	}
-
+	//TODO MODFIER
 	public int scannerIdCompan(String personnalisation) {
 		int valMaxId = CompanyDAOImpl.getInstance().getNbRows();
 		int repEnInt = -1;
 		String rep = "";
 		if (valMaxId != -1) {
-			afficher(
-					"Entrez l'ID de la companie que vous voulez " + personnalisation + " : (Nb max :" + valMaxId + ")");
 			do {
 
 				try {
@@ -290,7 +293,7 @@ public class CLI {
 					repEnInt = -1;
 				}
 
-			} while (repEnInt == -1 || (repEnInt <= 0 && repEnInt > valMaxId));
+			} while (repEnInt == -1 );
 		}
 
 		return repEnInt;

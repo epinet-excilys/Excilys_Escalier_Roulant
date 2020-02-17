@@ -40,13 +40,13 @@ public class Company {
 		public CompanyBuilder() {
 		}
 
-		public CompanyBuilder setIdBuild(int id) {
-			this.idBuild = id;
+		public CompanyBuilder setIdBuild(int idBDD) {
+			this.idBuild = idBDD;
 			return this;
 		}
 
-		public CompanyBuilder setNameBuild(String name) {
-			this.nameBuild = name;
+		public CompanyBuilder setNameBuild(String nameBDD) {
+			this.nameBuild = nameBDD;
 			return this;
 		}
 

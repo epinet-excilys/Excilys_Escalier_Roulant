@@ -57,7 +57,7 @@ private static volatile CompanyDAOImpl instance = null;
 		List<Company> list = null;
 		try {
 
-			list = CompanyDAO.getInstance().findAll();
+			list = CompanyDAO.getInstance().findAll().get();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

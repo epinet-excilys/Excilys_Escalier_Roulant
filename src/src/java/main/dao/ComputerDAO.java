@@ -23,7 +23,7 @@ public final class ComputerDAO {
 	private final String updateStatement = "UPDATE computer set name=?, introduced=? , discontinued=?, company_id=? where id=?;";
 	private final String deleteStatement = "DELETE from computer where id=?;";
 	//
-	private final String getStatement = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id"
+	private final String getStatement = "SELECT computer.id, computer.name, computer.introduced, computer.discontinued, computer.company_id, company.name"
 			+ " FROM computer  LEFT JOIN company ON company_id = company.id WHERE computer.id = ?;";
 	private final String getAllStatement = "SELECT * FROM computer LEFT JOIN company ON company_id = company.id ;";
 	private final String getAllPaginateStatement = "SELECT * FROM computer LEFT JOIN company ON company_id = company.id LIMIT ?, ?;";
@@ -71,12 +71,11 @@ public final class ComputerDAO {
 		}
 	}
 
-	public void delete(Computer computer) throws SQLException {
+	public void delete(int idSuppression) throws SQLException {
 
 		try (Connection connect = ConnexionSQL.getConn();
 				PreparedStatement stmt = connect.prepareStatement(deleteStatement);) {
-
-			stmt.setInt(1, computer.getId());
+			stmt.setInt(1, idSuppression);
 			stmt.executeUpdate();
 
 		} catch (SQLException e) {
@@ -104,17 +103,17 @@ public final class ComputerDAO {
 
 	}
 
-	public Optional<Computer> find(int i) throws SQLException {
+	public Optional<Computer> find(int idSearch) throws SQLException {
 
 		Computer computer = new Computer();
 
 		try (Connection connect = ConnexionSQL.getConn();
 				PreparedStatement stmt = connect.prepareStatement(getStatement);) {
-			stmt.setInt(1, i);
+			stmt.setInt(1, idSearch);
 			result = stmt.executeQuery();
-
+			
+			
 			if (result.first()) {
-
 				computer = ComputerMapper.getInstance().getComputerFromResultSet(result);
 
 			}

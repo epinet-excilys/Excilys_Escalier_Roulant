@@ -12,7 +12,7 @@ public class Computer {
 	
 	
 	
-	private Computer(int id, String name, LocalDate introDate, LocalDate discoDate, Company company) {
+	public Computer(int id, String name, LocalDate introDate, LocalDate discoDate, Company company) {
 		this.id = id;
 		this.name = name;
 		this.introDate = introDate;

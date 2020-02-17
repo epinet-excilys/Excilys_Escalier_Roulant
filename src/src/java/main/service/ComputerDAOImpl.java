@@ -65,20 +65,11 @@ public final class ComputerDAOImpl {
 	}
 
 	public void delete(Computer obj) {
-		Computer comp = null;
-		try {
-			comp = ComputerDAO.getInstance().find(obj.getId()).get();
-		} catch (SQLException e) {
-			//TODO log
-		}
-
-		if (comp != null) {
 			try {
-				ComputerDAO.getInstance().delete(comp);
+				ComputerDAO.getInstance().delete(obj.getId());
 			} catch (SQLException e) {
 				// TODO log
 			}
-		}
 
 	}
 

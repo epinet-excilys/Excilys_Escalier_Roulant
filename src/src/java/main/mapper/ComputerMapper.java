@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import src.java.main.dao.CompanyDAO;
 import src.java.main.model.Company;
 import src.java.main.model.Computer;
 
@@ -34,8 +35,8 @@ public final class ComputerMapper {
 	}
 
 	public Computer getComputerFromResultSet(ResultSet resultSet) throws SQLException {
-		// Computer computer = new Computer();
-		// Company company = new Company();
+		
+		
 		int id = resultSet.getInt("id");
 		String name = resultSet.getString("name");
 		//
@@ -46,11 +47,33 @@ public final class ComputerMapper {
 				? resultSet.getTimestamp("discontinued").toLocalDateTime().toLocalDate()
 				: null);
 
-		//
+		
 		int idComp = (resultSet.getInt("company_id"));
 		String nameComp = (resultSet.getString("company.name"));
-
+		
 		Company company = new Company.CompanyBuilder().setIdBuild(idComp).setNameBuild(nameComp).build();
+		
+	
+		
+		Computer computer = new Computer.ComputerBuilder().setIdBuild(id).setNameBuild(name)
+				.setIntroDateBuild(introDate).setDiscoDateBuild(discoDate).setIdCompagnyBuild(company).build();
+		return computer;
+	}
+
+	public Computer fromStringToComput(String[] resultTab) {
+		int id = Integer.parseInt(resultTab[0]);
+		String name = resultTab[1];
+		LocalDate introDate = fromStringToLocalDate(resultTab[2]);
+		LocalDate discoDate = fromStringToLocalDate(resultTab[3]);
+		int idComp = Integer.parseInt(resultTab[4]);
+		
+		//TODO REVOIR CE PASSAGE
+		Company company= null;
+		try {
+			company = CompanyDAO.getInstance().find(idComp).get();
+		} catch (SQLException e) {
+			// TODO log
+		}
 		
 		Computer computer = new Computer.ComputerBuilder().setIdBuild(id).setNameBuild(name)
 				.setIntroDateBuild(introDate).setDiscoDateBuild(discoDate).setIdCompagnyBuild(company).build();
@@ -58,46 +81,13 @@ public final class ComputerMapper {
 		return computer;
 	}
 
-	/*
-	 * public Computer fromStringToComput(String[] result) {
-	 * 
-	 * Computer comput = new Computer(); int id = 0; String name = ""; LocalDateTime
-	 * introduced = null; LocalDateTime discontinued = null; int company_id = 0;
-	 * 
-	 * 
-	 * 
-	 * 
-	 * try {
-	 * 
-	 * id = Integer.parseInt(result[0]); name = result[1];
-	 * 
-	 * introduced = fromStringToLocalDateTime(result[2]); discontinued =
-	 * fromStringToLocalDateTime(result[3]); company_id =
-	 * Integer.parseInt(result[4]);
-	 * 
-	 * } catch (Exception e) { //TODO je sais pas quoi faire La }
-	 * 
-	 * System.out.println(new Computer(id,name,introduced, discontinued,
-	 * company_id)); return new Computer(id,name,introduced, discontinued,
-	 * company_id);
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
-
 	// TODO : Ne marche pas
 
-	public LocalDateTime fromStringToLocalDateTime(String s) {
+	public LocalDate fromStringToLocalDate(String s) {
 
 		if (!s.isEmpty()) {
-
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			LocalDateTime dateTime = LocalDateTime.parse(s, formatter);
-
-			System.out.println(dateTime + "BLEUUUU");
+			LocalDate dateTime = LocalDate.parse(s, formatter);
 			return dateTime;
 		} else {
 			return null;
