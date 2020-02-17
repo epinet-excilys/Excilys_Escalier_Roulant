@@ -20,7 +20,7 @@ public class Computer {
 		this.company = company;
 	}
 		
-	private Computer() {
+	public Computer() {
 	}
 	
 	

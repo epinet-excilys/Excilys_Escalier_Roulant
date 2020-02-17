@@ -51,6 +51,7 @@ public final class ComputerMapper {
 		String nameComp = (resultSet.getString("company.name"));
 
 		Company company = new Company.CompanyBuilder().setIdBuild(idComp).setNameBuild(nameComp).build();
+		
 		Computer computer = new Computer.ComputerBuilder().setIdBuild(id).setNameBuild(name)
 				.setIntroDateBuild(introDate).setDiscoDateBuild(discoDate).setIdCompagnyBuild(company).build();
 

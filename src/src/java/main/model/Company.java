@@ -10,7 +10,7 @@ public class Company {
 		this.name = name;
 	}
 	
-	private Company() {
+	public Company() {
 	}
 	
 

@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 
@@ -103,9 +104,10 @@ public final class ComputerDAO {
 
 	}
 
-	public Computer find(int i) throws SQLException {
+	public Optional<Computer> find(int i) throws SQLException {
 
 		Computer computer = new Computer();
+
 		try (Connection connect = ConnexionSQL.getConn();
 				PreparedStatement stmt = connect.prepareStatement(getStatement);) {
 			stmt.setInt(1, i);
@@ -123,10 +125,10 @@ public final class ComputerDAO {
 			result.close();
 		}
 
-		return computer;
+		return Optional.ofNullable(computer);
 	}
 
-	public ArrayList<Computer> findAll() throws SQLException {
+	public Optional<ArrayList<Computer>> findAll() throws SQLException {
 
 		ArrayList<Computer> list = new ArrayList<Computer>();
 		Computer computer;
@@ -147,10 +149,10 @@ public final class ComputerDAO {
 
 		}
 
-		return list;
+		return Optional.ofNullable(list);
 	}
 
-	public ArrayList<Computer> findAllPaginate(int ligneDebutOffSet, int taillePage) throws SQLException {
+	public Optional<ArrayList<Computer>> findAllPaginate(int ligneDebutOffSet, int taillePage) throws SQLException {
 
 		ArrayList<Computer> list = new ArrayList<Computer>();
 		Computer computer;
@@ -172,18 +174,18 @@ public final class ComputerDAO {
 
 		}
 
-		return list;
+		return Optional.ofNullable(list);
 	}
 
 	public int getNbRow() throws SQLException {
-		int a = 0;
+		int nbRow = -1;
 
 		try (Connection connect = ConnexionSQL.getConn();
 				PreparedStatement stmt = connect.prepareStatement(getNbRowsStatement);) {
 			result = stmt.executeQuery();
 
 			if (result.first()) {
-				a = result.getInt("Rows");
+				nbRow = result.getInt("Rows");
 
 			}
 
@@ -193,7 +195,7 @@ public final class ComputerDAO {
 			result.close();
 		}
 
-		return a;
+		return nbRow;
 
 	}
 

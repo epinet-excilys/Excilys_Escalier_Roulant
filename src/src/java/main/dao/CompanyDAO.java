@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.sql.PreparedStatement;
 
 import src.java.main.mapper.CompanyMapper;
@@ -46,7 +47,7 @@ public final class CompanyDAO {
 	public void update(Company obj) {
 	}
 
-	public Company find(int i) throws SQLException {
+	public Optional<Company> find(int i) throws SQLException {
 
 		Company company = new Company();
 
@@ -58,7 +59,7 @@ public final class CompanyDAO {
 			result = stmt.executeQuery();
 
 			if (result.first()) {
-				company = new Company(i, result.getString("name"));
+				company = CompanyMapper.getInstance().getCompanyFromResultSet(result);
 			}
 		} catch (SQLException e) {
 			// TODO REMPLIR AVEC LOG
@@ -66,10 +67,10 @@ public final class CompanyDAO {
 			result.close();
 		}
 
-		return company;
+		return Optional.ofNullable(company);
 	}
 
-	public ArrayList<Company> findAll() throws SQLException {
+	public Optional<ArrayList<Company>> findAll() throws SQLException {
 
 		ArrayList<Company> list = new ArrayList<Company>();
 		Company company;
@@ -91,7 +92,7 @@ public final class CompanyDAO {
 			result.close();
 		}
 
-		return list;
+		return Optional.ofNullable(list);
 	}
 
 	public int getNbRow() throws SQLException {

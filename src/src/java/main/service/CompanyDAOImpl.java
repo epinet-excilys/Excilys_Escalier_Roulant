@@ -2,6 +2,7 @@ package src.java.main.service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import src.java.main.dao.CompanyDAO;
 import src.java.main.model.Company;
@@ -29,7 +30,7 @@ private static volatile CompanyDAOImpl instance = null;
 		
 	}
 
-	public Company find(int i) {
+	public Optional<Company> find(int i) {
 		Company company = null;
 		int a = -1;
 
@@ -42,17 +43,17 @@ private static volatile CompanyDAOImpl instance = null;
 
 		if ((i <= a) && (a != -1)) {
 			try {
-				company = CompanyDAO.getInstance().find(i);
+				company = CompanyDAO.getInstance().find(i).get();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-		return company;
+		return Optional.ofNullable(company);
 	}
 
-	public List<Company> getAllComput() {
+	public Optional<List<Company>> getAllComput() {
 		List<Company> list = null;
 		try {
 
@@ -63,20 +64,20 @@ private static volatile CompanyDAOImpl instance = null;
 			e.printStackTrace();
 		}
 
-		return list;
+		return Optional.ofNullable(list);
 
 	}
 	
 	public int getNbRows() {
-		int a = -1;
+		int nbRow = -1;
 		try {
-			a = CompanyDAO.getInstance().getNbRow();
+			nbRow = CompanyDAO.getInstance().getNbRow();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return a;
+		return nbRow;
 	}
 
 	

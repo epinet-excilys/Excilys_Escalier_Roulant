@@ -13,15 +13,14 @@ import src.java.main.EnumMenu;;
 
 public class CLI {
 
-
 	private Scanner sc;
-	private String[] tabRep = {"","","","",""} ;
-	private boolean flagContinue; 
+	private String[] tabRep = { "", "", "", "", "" };
+	private boolean flagContinue;
 	private final int TAILLE_PAGE = 20;
 
 	public CLI() {
 		sc = new Scanner(System.in);
-		
+
 	}
 
 	public void demonstration() {
@@ -37,17 +36,14 @@ public class CLI {
 			afficher("         4 pour modifier un Computer");
 			afficher("         5 pour afficher la liste Company");
 			afficher("         6 pour quitter");
-			
-			
+
 			commande = scannerQuestion(0, 6);
-			
-			
-			
+
 			switch (EnumMenu.valueOf(commande)) {
-			
+
 			case DISPLAYALLCOMPUTER:
 				afficher("liste comput");
-				//affiAllComput();
+				// affiAllComput();
 				affiAllPaginateComput();
 				break;
 			case DISPLAYCOMPUTER:
@@ -79,43 +75,41 @@ public class CLI {
 
 	}
 
-	//TODO A REFAIRE
+	// TODO A REFAIRE
 	// Methode Comput
 	public void addComput() {
-		
-		Computer comp = null ;
+
+		Computer comp = null;
 
 		afficher("Vous allez saisir les valeurs champs par champs");
-		
-			int i = (ComputerDAOImpl.getInstance().getNbRows()+1);
-			String passage_1 = ""+i+"";
-			tabRep[0]=(passage_1);
-			
-			afficher("Saisir le nom");
-			tabRep[1]= "Nom" ;//(sc.nextLine());
-			
-			afficher("Saisir la Date d'introduction sur le marché (AAAA-MM-dd");
-			tabRep[2]=(sc.nextLine());
-			
-			afficher("Saisir la Date de retrait du le marché (AAAA-MM-dd");
-			tabRep[3]=(sc.nextLine());
-			
-			afficher("Saisir l'id de la companie ");
-			int a = scannerIdCompan("ajoutez");
-			
-			System.out.println(a);
-			
-			/*
-			TODO ENLEVER LE CODE
-			String passage_2 = a + "";
-			tabRep[4]=(passage_2);
-			
-			comp = ComputerMapper.getInstance().fromStringToComput((tabRep));
-			
-			afficher("Vous voulez ajoutez cette machine" + comp);
-			*/
-		
-		//ComputerDAOImpl.getInstance().add(comp);
+
+		int i = (ComputerDAOImpl.getInstance().getNbRows() + 1);
+		String passage_1 = "" + i + "";
+		tabRep[0] = (passage_1);
+
+		afficher("Saisir le nom");
+		tabRep[1] = "Nom";// (sc.nextLine());
+
+		afficher("Saisir la Date d'introduction sur le marché (AAAA-MM-dd");
+		tabRep[2] = (sc.nextLine());
+
+		afficher("Saisir la Date de retrait du le marché (AAAA-MM-dd");
+		tabRep[3] = (sc.nextLine());
+
+		afficher("Saisir l'id de la companie ");
+		int a = scannerIdCompan("ajoutez");
+
+		System.out.println(a);
+
+		/*
+		 * TODO ENLEVER LE CODE String passage_2 = a + ""; tabRep[4]=(passage_2);
+		 * 
+		 * comp = ComputerMapper.getInstance().fromStringToComput((tabRep));
+		 * 
+		 * afficher("Vous voulez ajoutez cette machine" + comp);
+		 */
+
+		// ComputerDAOImpl.getInstance().add(comp);
 
 	}
 
@@ -125,10 +119,10 @@ public class CLI {
 
 	public void deletComput() {
 
-		int a = scannerIdComput("supprimer");
+		int commandeId = scannerIdComput("supprimer");
 
-		if (a != -1) {
-			Computer comp = ComputerDAOImpl.getInstance().find(a);
+		if (commandeId != -1) {
+			Computer comp = ComputerDAOImpl.getInstance().find(commandeId).get();
 			afficher(comp);
 
 			ComputerDAOImpl.getInstance().delete(comp);
@@ -140,10 +134,10 @@ public class CLI {
 
 	public void affiComput() {
 
-		int a = scannerIdComput("afficher");
+		int commandeId = scannerIdComput("afficher");
 
-		if (a != -1) {
-			Computer comp = ComputerDAOImpl.getInstance().find(a);
+		if (commandeId != -1) {
+			Computer comp = ComputerDAOImpl.getInstance().find(commandeId).get();
 			afficher(comp);
 		} else {
 			afficher("Pas de Correspondance en Base");
@@ -152,32 +146,28 @@ public class CLI {
 	}
 
 	public void affiAllComput() {
-		List<Computer> list = ComputerDAOImpl.getInstance().getAllComput();
+		List<Computer> list = ComputerDAOImpl.getInstance().getAllComput().get();
 
 		for (Computer c : list) {
 			afficher(c);
 		}
 
 	}
-	
-	public void affiAllPaginateComput() {
-		int nbTotalRows  =  ComputerDAOImpl.getInstance().getNbRows();
-		int currentRow = 0; 
 
-		
+	public void affiAllPaginateComput() {
+		int nbTotalRows = ComputerDAOImpl.getInstance().getNbRows();
+		int currentRow = 0;
+
 		do {
-			List<Computer>list = ComputerDAOImpl.getInstance().getAllPaginateComput(currentRow, TAILLE_PAGE);
+			List<Computer> list = ComputerDAOImpl.getInstance().getAllPaginateComput(currentRow, TAILLE_PAGE).get();
 			for (Computer c : list) {
 				afficher(c);
 			}
 			afficher("----------------");
-			currentRow+=20;
-			
-		}while (currentRow<nbTotalRows);
-		
-		
-		
-		
+			currentRow += 20;
+
+		} while (currentRow < nbTotalRows);
+
 	}
 
 	// Methode
@@ -201,12 +191,12 @@ public class CLI {
 
 		String rep;
 		int repEnInt = -1;
-		
+
 		afficher("Entrer votre Choix : [" + premier_possib + ":" + deuxiem_possib + "]");
 
 		do {
-			
-			if( repEnInt != -1 && (repEnInt < premier_possib || repEnInt > deuxiem_possib)) {
+
+			if (repEnInt != -1 && (repEnInt < premier_possib || repEnInt > deuxiem_possib)) {
 				repEnInt = -1;
 				afficher("Entrer votre Choix : [" + premier_possib + ":" + deuxiem_possib + "]");
 			}
@@ -228,7 +218,7 @@ public class CLI {
 
 	}
 
-	//TODO Modifier
+	// TODO Modifier
 	public int scannerIdComput(String personnalisation) {
 		int valMaxId = ComputerDAOImpl.getInstance().getNbRows();
 		int repEnInt = -1;
@@ -254,50 +244,40 @@ public class CLI {
 
 	}
 
-	//TODO REFAIRE CETTE FONCTION
+	// TODO REFAIRE CETTE FONCTION
 	/*
-	public boolean scannerSur() {
+	 * public boolean scannerSur() {
+	 * 
+	 * String oui = "OUI"; String non = "non"; String rep = "vide";
+	 * 
+	 * do { afficher("Etes vous sur ? [" + oui + ":" + non + "]");
+	 * 
+	 * try { rep = sc.nextLine();
+	 * 
+	 * } catch (Exception e) {
+	 * afficher("Veuillez entrer une valeurs compréhensive pour le programme"); }
+	 * 
+	 * } while (!rep.contentEquals(oui) || !rep.contentEquals(non));
+	 * 
+	 * if (rep.contentEquals(oui)) { return true; } else if (rep.contentEquals(non))
+	 * { return false; } else { afficher("Erreur de saisi"); return false; }
+	 * 
+	 * }
+	 */
 
-		String oui = "OUI";
-		String non = "non";
-		String rep = "vide";
-
-		do {
-			afficher("Etes vous sur ? [" + oui + ":" + non + "]");
-
-			try {
-				rep = sc.nextLine();
-
-			} catch (Exception e) {
-				afficher("Veuillez entrer une valeurs compréhensive pour le programme");
-			}
-
-		} while (!rep.contentEquals(oui) || !rep.contentEquals(non));
-
-		if (rep.contentEquals(oui)) {
-			return true;
-		} else if (rep.contentEquals(non)) {
-			return false;
-		} else {
-			afficher("Erreur de saisi");
-			return false;
-		}
-
-	}
-	*/
-	
 	public String scannerString(String personnalisation) {
-		String rep ="non_valable";
-		
-		return rep; 
+		String rep = "non_valable";
+
+		return rep;
 	}
-	
+
 	public int scannerIdCompan(String personnalisation) {
 		int valMaxId = CompanyDAOImpl.getInstance().getNbRows();
 		int repEnInt = -1;
 		String rep = "";
 		if (valMaxId != -1) {
-			afficher("Entrez l'ID de la companie que vous voulez " + personnalisation + " : (Nb max :" + valMaxId + ")");
+			afficher(
+					"Entrez l'ID de la companie que vous voulez " + personnalisation + " : (Nb max :" + valMaxId + ")");
 			do {
 
 				try {

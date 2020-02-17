@@ -3,6 +3,7 @@ package src.java.main.service;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import src.java.main.dao.ComputerDAO;
 import src.java.main.model.Computer;
@@ -28,21 +29,20 @@ public final class ComputerDAOImpl {
 		return ComputerDAOImpl.instance;
 	}
 
-	// A MODIFIER
+	// TODO A MODIFIER
 	public void update(Computer obj) {
 		Computer comp = null;
 		try {
-			comp = ComputerDAO.getInstance().find(obj.getId());
+			comp = ComputerDAO.getInstance().find(obj.getId()).get();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// TODO log
 		}
 
 		if (comp != null) {
 			try {
 				ComputerDAO.getInstance().update(obj);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// TODO log
 			}
 		}
 	}
@@ -50,17 +50,16 @@ public final class ComputerDAOImpl {
 	public void add(Computer obj) {
 		Computer comp = null;
 		try {
-			comp = ComputerDAO.getInstance().find(obj.getId());
+			comp = ComputerDAO.getInstance().find(obj.getId()).get();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//TODO log
 		}
 
 		if (comp == null) {
 			try {
 				ComputerDAO.getInstance().create(obj);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// TODO log
 			}
 		}
 	}
@@ -68,86 +67,71 @@ public final class ComputerDAOImpl {
 	public void delete(Computer obj) {
 		Computer comp = null;
 		try {
-			comp = ComputerDAO.getInstance().find(obj.getId());
+			comp = ComputerDAO.getInstance().find(obj.getId()).get();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//TODO log
 		}
 
 		if (comp != null) {
 			try {
 				ComputerDAO.getInstance().delete(comp);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// TODO log
 			}
 		}
 
 	}
 
 	//
-	public Computer find(int i) {
+	public Optional<Computer> find(int i) {
 		Computer comp = null;
-		int a = -1;
 
 		try {
-			a = ComputerDAO.getInstance().getNbRow();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			comp = ComputerDAO.getInstance().find(i).get();
+		} catch (SQLException e) {
+			// TODO Log
 		}
 
-		if ((i <= a) && (a != -1)) {
-			try {
-				comp = ComputerDAO.getInstance().find(i);
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		return comp;
+		return Optional.ofNullable(comp);
 	}
 
-	public List<Computer> getAllComput() {
+	public Optional<List<Computer>> getAllComput() {
 		List<Computer> list = null;
 		try {
 
-			list = ComputerDAO.getInstance().findAll();
+			list = ComputerDAO.getInstance().findAll().get();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO Log
 		}
 
-		return list;
+		return Optional.ofNullable(list);
 
 	}
 
-	public List<Computer> getAllPaginateComput(int ligneDebutOffSet, int taillePage) {
+	public Optional<List<Computer>> getAllPaginateComput(int ligneDebutOffSet, int taillePage) {
 		List<Computer> list = null;
 		try {
 
-			list = ComputerDAO.getInstance().findAllPaginate(ligneDebutOffSet, taillePage);
+			list = ComputerDAO.getInstance().findAllPaginate(ligneDebutOffSet, taillePage).get();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO log
 		}
 
-		return list;
+		return Optional.ofNullable(list);
 
 	}
 
 	public int getNbRows() {
-		int a = -1;
+		int nbRow = -1;
 		try {
-			a = ComputerDAO.getInstance().getNbRow();
+			nbRow = ComputerDAO.getInstance().getNbRow();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// TODO Log
 		}
 
-		return a;
+		return nbRow;
 	}
 
 }
