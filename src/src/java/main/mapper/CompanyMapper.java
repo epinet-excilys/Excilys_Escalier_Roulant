@@ -29,7 +29,12 @@ public final class CompanyMapper {
 	
 	public Company getCompanyFromResultSet(ResultSet resultSet) throws SQLException {
 		
-		return new Company(resultSet.getInt("id"), resultSet.getString("name"));
+		int idComp = resultSet.getInt("id");
+		String nameComp = resultSet.getString("name");
+		
+		Company company = new Company.CompanyBuilder().setIdBuild(idComp).setNameBuild(nameComp).build();
+		
+		return company;
 		
 		
 	}

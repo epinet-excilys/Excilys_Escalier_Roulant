@@ -5,15 +5,14 @@ public class Company {
 	private int id;
 	private String name;
 	
-	public Company(int id, String name) {
+	private Company(int id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 	
-	public Company() {
+	private Company() {
 	}
-
-
+	
 
 
 	public Company(int id) {
@@ -33,7 +32,33 @@ public class Company {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public static class CompanyBuilder {
+		private int idBuild;
+		private String nameBuild;
 
+		public CompanyBuilder() {
+		}
+
+		public CompanyBuilder setIdBuild(int id) {
+			this.idBuild = id;
+			return this;
+		}
+
+		public CompanyBuilder setNameBuild(String name) {
+			this.nameBuild = name;
+			return this;
+		}
+
+		public Company build() {
+			return new Company(this);
+		}
+	}
+	
+	public Company(CompanyBuilder builder) {
+		this.id = builder.idBuild;
+		this.name = builder.nameBuild;
+	}
 
 	@Override
 	public int hashCode() {

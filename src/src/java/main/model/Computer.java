@@ -12,7 +12,7 @@ public class Computer {
 	
 	
 	
-	public Computer(int id, String name, LocalDate introDate, LocalDate discoDate, Company company) {
+	private Computer(int id, String name, LocalDate introDate, LocalDate discoDate, Company company) {
 		this.id = id;
 		this.name = name;
 		this.introDate = introDate;
@@ -20,11 +20,10 @@ public class Computer {
 		this.company = company;
 	}
 		
-	public Computer() {
+	private Computer() {
 	}
-
-
-
+	
+	
 
 	public int getId() {
 		return id;
@@ -56,6 +55,53 @@ public class Computer {
 	public void setCompany(Company company) {
 		this.company = company;
 	}
+	
+
+	public static class ComputerBuilder {
+		private int idBuild;
+		private String nameBuild;
+		private LocalDate introDateBuild;
+		private LocalDate discoDateBuild;
+		private Company companyBuild;
+
+		public ComputerBuilder setIdBuild(int id) {
+			this.idBuild = id;
+			return this;
+		}
+
+		public ComputerBuilder setNameBuild(String name) {
+			this.nameBuild = name;
+			return this;
+		}
+
+		public ComputerBuilder setIntroDateBuild(LocalDate introduced) {
+			this.introDateBuild = introduced;
+			return this;
+		}
+
+		public ComputerBuilder setDiscoDateBuild(LocalDate dicontinued) {
+			this.discoDateBuild = dicontinued;
+			return this;
+		}
+
+		public ComputerBuilder setIdCompagnyBuild(Company company) {
+			this.companyBuild = company;
+			return this;
+		}
+
+		public Computer build() {
+			return new Computer(this);
+		}
+	}
+
+	private Computer(ComputerBuilder builder) {
+		this.id = builder.idBuild;
+		this.name = builder.nameBuild;
+		this.introDate = builder.introDateBuild;
+		this.discoDate = builder.discoDateBuild;
+		this.company = builder.companyBuild;
+	}
+	
 
 	@Override
 	public int hashCode() {
